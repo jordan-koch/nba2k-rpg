@@ -115,11 +115,27 @@ All nine are ADRs. The ones most often re-proposed:
 - **Work on a branch; land it through a PR.** `main` is protected. Never commit
   to `main` directly.
 - **Agents commit only through `/commit`.** Never run `git commit` ad hoc — not
-  for a one-line change, not for an "obviously safe" one. **Never merge, push, or
-  amend** — those stay the user's.
+  for a one-line change, not for an "obviously safe" one.
+- **Agents may push a feature branch and prune a merged one.** Both are
+  recoverable, and making the user type them buys nothing. Still theirs alone:
+  **merge, amend, force-push, and any push to `main`.**
+- **Prune only against a verified-merged check — and `-d` is not that check.**
+  PRs here land as **squash merges**, so the branch tip is never an ancestor of
+  `main` and `git branch -d` refuses every already-merged branch. The check that
+  actually works is content equality:
+
+  ```powershell
+  git fetch origin
+  git diff <branch> origin/main --stat    # empty output = fully merged
+  ```
+
+  Empty means safe, and only then is `-D` appropriate. Reaching for `-D` because
+  `-d` complained, *without* running that diff, is how unmerged work gets thrown
+  away. The commit stays in the reflog for ~90 days either way.
 - **Subagents get read-only git.** When spawning any subagent, tell it git is
   read-only — never `checkout`/`reset`/`restore`/`clean`/`stash` or anything that
-  discards working-tree state. Bubble a destructive-git *need* back up.
+  discards working-tree state. Bubble a destructive-git *need* back up. The push
+  and prune allowances above are the main agent's, not a subagent's.
 - **Label your epistemics.** *Measured*, *verified*, *inferred*, *assumed*,
   *unconfirmed* mean different things. Most of this repo rests on beliefs about a
   game's file formats and a league's statistics; an unconfirmed claim is a task,

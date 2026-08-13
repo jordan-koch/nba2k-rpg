@@ -231,8 +231,8 @@ are expected — the read-only rule is for *subagents*; **don't run git** here):
 
 Then **hand off to `/commit`** — per project convention, never `git commit` ad hoc. `/commit` runs the
 doc checks (a build like this almost always warrants the full `/update-docs` sweep), shows the staged
-list, and asks. The push and the PR stay the user's. CI re-runs the mechanical gates there; a red check
-is **stop-and-fix**, not a retry-loop.
+list, and asks — then commits and pushes the branch on your yes. Opening the PR stays the user's. CI
+re-runs the mechanical gates there; a red check is **stop-and-fix**, not a retry-loop.
 
 ```markdown
 > **Status:** implemented · created <YYYY-MM-DD> · decided · next: commit

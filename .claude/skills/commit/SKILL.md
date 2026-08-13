@@ -8,8 +8,9 @@ description: >-
   It stages deliberately (never a blind `git add -A`), refuses to stage secrets or bulk data, runs
   the doc-drift checks proportionally to what changed, keeps `ROADMAP.md`'s per-item completion
   statuses in step with what actually landed, proposes a message, and asks before writing anything.
-  It does NOT push and does NOT open a PR — those stay yours. It does NOT run lint, types, tests;
-  CI owns those and runs them on the PR.
+  On approval it commits and pushes the feature branch. It does NOT open the PR, never pushes
+  `main`, and never force-pushes — those stay yours. It does NOT run lint, types, tests; CI owns
+  those and runs them on the PR.
 ---
 
 # Commit
@@ -168,6 +169,9 @@ requests rather than ~60k. Fixtures cover 2019-20 (bubble) and 2011-12
 Then **ask, explicitly, and wait.** Not a rhetorical "shall I commit?" trailing a wall of text — a
 real question with the staged list visible above it. The user's yes is the gate.
 
+That one yes covers **commit and push** (Steps 6 and 7). Say so when you ask, so the scope of the
+approval is on screen rather than assumed.
+
 ## Step 6 — Commit
 
 On approval:
@@ -181,17 +185,33 @@ Hard rails, no exceptions without an explicit request:
 - **Never `--no-verify`.** If a hook fails, that's the hook working.
 - **Never `--amend`.** Amending rewrites history that may already be pushed. A follow-up commit is
   almost always right; if the user genuinely wants an amend, they'll say so.
-- **Never `push`.** Pushing publishes to a public repo — outward-facing, and the user's call.
 - **Never `-A` at this stage.** Staging happened in Step 2, deliberately — plus the doc and
   roadmap files you edited in Steps 3–4, staged by path.
 
-Then report the short SHA and hand back the push command:
+## Step 7 — Push the branch
+
+The user's yes in Step 5 covers the commit **and** pushing it. Push without asking again:
 
 ```
 git push -u origin <branch>
 ```
 
-If the branch has no upstream yet, say so — the `-u` matters and is easy to forget.
+`-u` on the first push of a branch, plain `git push` after. Then report the short SHA and the
+PR-creation URL the remote hands back.
+
+Three limits, and they are not negotiable without an explicit request:
+
+- **Never push `main`.** If Step 1 was overridden and the commit landed on `main`, stop here and
+  hand the command back. Protection will reject it anyway; better to say so than to generate a
+  confusing rejection.
+- **Never force-push.** Not `--force`, not `--force-with-lease`. Rewriting published history is the
+  user's call, always.
+- **Never open the PR.** Push, then hand over the URL. Opening it — title, body, reviewers — is a
+  judgment call the user makes.
+
+Pushing runs CI only if a PR exists; a first push to a fresh branch triggers nothing, because the
+workflow fires on `pull_request` and on `push` to `main`. Say so rather than leaving the user
+watching for a run that will never start.
 
 ---
 
@@ -204,4 +224,5 @@ If the branch has no upstream yet, say so — the `-u` matters and is easy to fo
 - **The doc check was sized to the change.** Full sweep on a new model; link check on a typo fix.
 - **`ROADMAP.md` still describes reality.** An item that finished is `DONE` in the same commit that
   finished it — never marked ahead of the work, never walked backwards without asking.
-- **It committed and stopped.** No push, no PR, no amend, no `--no-verify`.
+- **It committed, pushed the branch, and stopped there.** No PR, no merge, no amend, no
+  force-push, no `--no-verify`.
