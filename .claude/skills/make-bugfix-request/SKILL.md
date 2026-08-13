@@ -85,10 +85,10 @@ high-value gaps:
    hand-calc, a prior correct run).
 4. **Severity** — how much it hurts + urgency. Rank above cosmetic anything that **corrupts or drops
    landed data**, **spends cloud money unexpectedly**, or **produces a number someone might act on**.
-   The landing zone is immutable for a reason; a defect that writes into it is the worst class here.
+   The ledger is append-only for a reason; a defect that mutates a recorded event is the worst class here.
 5. **Regression?** — did it used to work? What changed — a recent commit, a dependency bump, or an
    **upstream API change**? That last one is uniquely likely here and uniquely easy to miss, since
-   `stats.nba.com` ships breaking changes without notice.
+   an external source ships breaking changes without notice.
 
 If basketball specifics matter (a stat the model computes wrongly), pin the *expected* behavior here —
 and say where the expectation comes from — so diagnosis has a target. But don't diagnose.
@@ -174,7 +174,7 @@ landed.
   cause-hunch, it's a diagnosis in disguise — rewrite it around what was *observed*.
 - **A real reproduction.** The single highest-value field. "It's wrong sometimes" is not a repro; "run
   `X` with input `Y`, get `Z`, expected `W`" is.
-- **Honest severity.** A defect that corrupts the landing zone outranks a cosmetic typo — say
+- **Honest severity.** A defect that corrupts the career ledger outranks a cosmetic typo — say
   which, so diagnosis and the funnel can pace themselves.
 - **Grounded.** Real file/command names, not "the relevant code."
 - **Right altitude.** It says *what's broken* and *how to trigger it*, gestures at *where*, and stops.

@@ -87,7 +87,7 @@ it touches**, so the request lands pre-grounded:
   update semantics, and extraction cost. See
   [`requests/feature-requests/README.md`](../../../requests/feature-requests/README.md). You are
   not deciding them here; you are making sure scoping knows they are open.
-- Any obvious constraints from the project rules (resolve-by-name, immutable landing zone,
+- Any obvious constraints from the project rules (resolve-by-name, append-only ledger,
   grain-declared-and-tested, agents-never-commit, no bulk data in the repo) this has to live within?
 
 Aim for **~3–6 targeted lookups** — enough to name the subsystem and the 2–4 files/datasets a

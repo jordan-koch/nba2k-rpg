@@ -123,11 +123,8 @@ def test_every_adr_is_listed_in_the_index() -> None:
 
 def test_adr_numbers_are_unique_and_contiguous() -> None:
     decisions = REPO_ROOT / "docs" / "decisions"
-    numbers = sorted(
-        int(match.group(1))
-        for p in decisions.glob("*.md")
-        if (match := ADR_FILENAME.match(p.name))
-    )
+    matches = (ADR_FILENAME.match(p.name) for p in decisions.glob("*.md"))
+    numbers = sorted(int(m.group(1)) for m in matches if m)
 
     assert numbers, "No ADRs found."
     assert len(numbers) == len(set(numbers)), f"Duplicate ADR numbers: {numbers}"

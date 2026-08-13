@@ -58,7 +58,7 @@ commit. Then stage by path.
 |---|---|
 | Anything under `var/` | Gitignored working root — regenerable, machine-local |
 | `.env`, `*.pem`, `*.key`, credentials | This repo is **public**; a leaked secret is permanent in history |
-| `*.parquet`, `*.duckdb`, `*.sqlite` outside `tests/fixtures/` | The repo holds code, config and the career ledger — not bulk data |
+| `*.parquet`, `*.sqlite`, `*.db` outside `tests/fixtures/` | The repo holds code, config and the career ledger — not bulk data |
 | `var/`, `node_modules/`, `.venv/`, `__pycache__/` | Generated or machine-local |
 | Anything you can't explain the presence of | If you don't know why it changed, neither will the reviewer |
 

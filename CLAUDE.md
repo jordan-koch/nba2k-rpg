@@ -20,6 +20,29 @@ because of five specific disagreements with its implementation, listed in
 **Phase 0 — harness.** Process and CI exist; **no application code yet.** The
 first work item is Phase 1's `app-shell`.
 
+## Stack
+
+Python 3.12, uv, ruff, mypy strict, pytest. The app is a **localhost web app:
+FastAPI + a React SPA**, with local storage — SQLite as a rebuildable read-model
+over the tracked event ledger. No cloud, no credentials, no hosting.
+
+## The repo is PUBLIC
+
+GitHub Free requires a public repo for branch protection, and that trade was
+taken deliberately. Consequences that bind every change:
+
+- **Everything tracked is world-readable, forever** — including `careers/`, which
+  is tracked on purpose (see below).
+- **No machine-specific absolute paths, account ids, tokens, or personal
+  identifiers in tracked files.** `tests/test_no_leaks.py` fails the build on
+  drive-letter paths, home directories, and email addresses.
+- **Machine-specific values resolve from the environment.** `.env.example` lists
+  the keys; `.env` is gitignored. `research/tools/iff.ps1` is the worked
+  example — it reads `NBA2K26_INSTALL` or probes the Steam registry, and hardcodes
+  nothing.
+- Roster data extracted from the game install is **2K's**, not ours. Keep the
+  tracked footprint to what calibration actually needs.
+
 ## Project map
 
 ```
@@ -119,13 +142,17 @@ Its mirror: `var/` holds **only** regenerable things — the SQLite read-model
 Neither is upstream. Nothing here consumes anything from either. See
 [ADR 0007](docs/decisions/0007-repo-location-no-upstream.md).
 
-- **`D:\Projects\nba-analysis`** — NBA lakehouse, portfolio work, Phase 0. The
-  **style template**: toolchain, ADR format, request tracks, structural tests, CI.
-  Same domain by coincidence; *not* a source of box scores.
-- **`D:\Games\Emulation\Tools\pokemon-lab`** — Gen 3 Pokémon tooling. The
-  **structural sibling**: hobby-domain project with a `build/build-*.py` →
-  `datasets/` builder pattern resolved by logical name. That data-layer pattern is
-  the one to follow in Phase 2.
+Local checkouts, paths not recorded here — this repo is public. `.env.example`
+lists the keys (`NBA_ANALYSIS_PATH`, `POKEMON_LAB_PATH`); ask the user for the
+actual locations if you need to read either.
+
+- **`nba-analysis`** — NBA lakehouse, portfolio work, Phase 0. The **style
+  template**: toolchain, ADR format, request tracks, structural tests, CI. Same
+  domain by coincidence; *not* a source of box scores.
+- **`pokemon-lab`** — Gen 3 Pokémon tooling. The **structural sibling**:
+  hobby-domain project with a `build/build-*.py` → `datasets/` builder pattern
+  resolved by logical name. That data-layer pattern is the one to follow in
+  Phase 2.
 
 ## Context on the user
 

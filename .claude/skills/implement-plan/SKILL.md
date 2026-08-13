@@ -107,7 +107,7 @@ Honor the repo's hard constraints as you build (the relevant specialist reviewer
 - **Epistemics are labelled.** `unconfirmed` beliefs about an external source are tasks, not facts. Code that
   assumes an unverified source shape is a blocker until someone has actually pulled it.
 - **Anything outward-facing is user-run.** Pushes, merges, and branch-protection changes. Stage it and route it to
-  the user; take verification from their pasted output. Don't auto-run-and-confirm a billable step.
+  the user; take verification from their pasted output. Don't auto-run-and-confirm an outward-facing step.
 - **Windows dev, Linux CI.** `.gitattributes` normalizes line endings. Don't write files with
   PowerShell's `Set-Content`/`Out-File` — in PS 5.1 they mangle UTF-8. Use the file-editing tools.
 
@@ -284,7 +284,7 @@ surfaced.>
 - **Reviewers never touched the tree.** Read-only subagents, snapshot taken, integrity re-checked after.
 - **The plan was consumed, not re-opened.** You built what stage 3 sequenced; deviations are conscious
   and recorded, deferred phases stayed deferred.
-- **Billable and prod-touching steps went to the human.** Anything that spends cloud money or writes to
+- **Outward-facing steps went to the human.** Anything that pushes, merges, changes repo settings, or writes to
   prod was staged for the user to run, not executed and "confirmed."
 - **It handed off, it didn't commit.** The user is the committer; the report + `implemented` status
   + the `reviews/` trail are the deliverables.
