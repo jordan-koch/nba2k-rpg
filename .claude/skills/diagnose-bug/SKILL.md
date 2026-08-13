@@ -79,7 +79,7 @@ The repro is the through-line. Write it before the RCA that references it, so th
 2. **Write it + run it + confirm it's RED** against the current (buggy) code — `uv run pytest` fails,
    goes red on the new test. **A repro that's green today proves nothing**, and it
    usually means the diagnosis is wrong rather than the bug being absent.
-3. **Use committed fixtures only** — never a live API call (CI excludes them, and `stats.nba.com`
+3. **Use committed fixtures only** — never a live API call (CI excludes them, and an external source
    blocks impolite clients) and never anything from `var/`, which is gitignored and machine-local.
    See [`tests/fixtures/README.md`](../../../tests/fixtures/README.md).
 4. **Agents do not commit.** Tell the user the repro is red and ask them to commit it before you

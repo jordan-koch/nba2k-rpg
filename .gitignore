@@ -1,5 +1,6 @@
 # ─── Secrets ──────────────────────────────────────────────────────────────────
-# The repo is private, but treat credentials as if it weren't.
+# The repo is PUBLIC. Assume anything tracked is world-readable, forever.
+# tests/test_no_leaks.py also guards machine paths and personal identifiers.
 .env
 .env.*
 !.env.example

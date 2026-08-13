@@ -1,15 +1,48 @@
 # NBA 2K26 IFF toolkit: manifest lookup -> blob slice -> Oodle Kraken -> ZIP entries
-$GAME    = "D:\Programs\Steam\steamapps\common\NBA 2K26"
-$OUT     = Join-Path $PSScriptRoot "..\..\out"
-if (-not (Test-Path $OUT)) { New-Item -ItemType Directory -Force $OUT | Out-Null }
-$DLL     = "$GAME\data\oodle\oo2core_9_win64.dll"
+#
+# The install location is resolved, never hardcoded — this repo is public and a
+# literal path leaks the author's drive layout while breaking on every other
+# machine. Set NBA2K26_INSTALL (see .env.example) or let the Steam probe find it.
 
+function Resolve-GameRoot {
+    if ($env:NBA2K26_INSTALL) {
+        if (-not (Test-Path $env:NBA2K26_INSTALL)) {
+            throw "NBA2K26_INSTALL is set but does not exist: $($env:NBA2K26_INSTALL)"
+        }
+        return $env:NBA2K26_INSTALL
+    }
+    $candidates = @()
+    foreach ($key in 'HKCU:\Software\Valve\Steam', 'HKLM:\SOFTWARE\WOW6432Node\Valve\Steam') {
+        try {
+            $sp = (Get-ItemProperty -Path $key -ErrorAction Stop).SteamPath
+            if ($sp) { $candidates += (Join-Path ($sp -replace '/', '\') 'steamapps\common\NBA 2K26') }
+        } catch { }
+    }
+    # Secondary Steam libraries commonly live at <drive>:\SteamLibrary or \Steam.
+    foreach ($d in (Get-PSDrive -PSProvider FileSystem).Name) {
+        $candidates += "${d}:\SteamLibrary\steamapps\common\NBA 2K26"
+        $candidates += "${d}:\Steam\steamapps\common\NBA 2K26"
+        $candidates += "${d}:\Program Files (x86)\Steam\steamapps\common\NBA 2K26"
+    }
+    foreach ($c in $candidates) { if (Test-Path (Join-Path $c 'manifest')) { return $c } }
+    throw "NBA 2K26 install not found. Set NBA2K26_INSTALL to the folder containing 'manifest'."
+}
+
+$GAME    = Resolve-GameRoot
+$OUT     = Join-Path $PSScriptRoot "..\..\var\cache\iff"
+if (-not (Test-Path $OUT)) { New-Item -ItemType Directory -Force $OUT | Out-Null }
+$DLL     = Join-Path $GAME 'data\oodle\oo2core_9_win64.dll'
+if (-not (Test-Path $DLL)) { throw "Oodle DLL not found at $DLL" }
+
+# DllImport needs a compile-time constant, so the resolved path is interpolated
+# into the type definition. Add-Type caches by type name — if $GAME changes in a
+# live session, start a new one.
 if (-not ("Oodle" -as [type])) {
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
 public static class Oodle {
-    [DllImport(@"D:\Programs\Steam\steamapps\common\NBA 2K26\data\oodle\oo2core_9_win64.dll", CallingConvention=CallingConvention.Cdecl)]
+    [DllImport(@"$DLL", CallingConvention=CallingConvention.Cdecl)]
     public static extern IntPtr OodleLZ_Decompress(
         byte[] compBuf, IntPtr compBufSize, byte[] rawBuf, IntPtr rawLen,
         int fuzzSafe, int checkCRC, int verbosity,

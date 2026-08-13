@@ -128,7 +128,7 @@ panel. Unmarked items should skip straight to a plan or straight to work.
 
 | # | Item | Deliverable | Size | Needs |
 |---|---|---|---|---|
-| 0.1 | `repo-init` | git init, private remote, `.gitignore`, `.gitattributes`, README skeleton | S | — |
+| 0.1 | `repo-init` | git init, GitHub remote, `.gitignore`, `.gitattributes`, README skeleton | S | — |
 | 0.2 | `python-toolchain` | `pyproject.toml` (uv/ruff/mypy strict/pytest), `src/` package, first structural test | S | 0.1 |
 | 0.3 | `ci-harness` | GitHub Actions, branch protection, dependabot, secret scan | S | 0.2 |
 | 0.4 | `request-tracks` | `requests/` three tracks, READMEs, Index convention | S | 0.1 |

@@ -12,7 +12,9 @@ a fact.
 
 ## 1. Install data — fully accessible · `verified`
 
-`D:\Programs\Steam\steamapps\common\NBA 2K26`
+`<steam>\steamapps\common\NBA 2K26` — resolved at runtime by
+`research/tools/iff.ps1` from `NBA2K26_INSTALL` or a Steam registry probe. Never
+hardcode it; `tests/test_no_leaks.py` will fail the build.
 
 - **`manifest`** is a plaintext CSV index of **589,895 files**:
   `name,blob,offset,length`. No index reversing needed.
