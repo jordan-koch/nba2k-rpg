@@ -1,0 +1,41 @@
+# Line endings are decided by the REPO, not by whatever core.autocrlf a machine has.
+# Authored on Windows, run in Linux CI — without this, CI sees CRLF churn.
+* text=auto eol=lf
+
+# Windows-native scripts keep CRLF so they run correctly when checked out.
+# research/tools/*.ps1 is the live IFF extraction toolkit.
+*.ps1   text eol=crlf
+*.psm1  text eol=crlf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Explicitly text
+*.py    text
+*.yml   text
+*.yaml  text
+*.json  text
+*.jsonl text
+*.md    text
+*.toml  text
+*.js    text
+*.mjs   text
+*.ts    text
+*.tsx   text
+*.css   text
+*.html  text
+
+# The career ledger is append-only JSONL and is tracked (see .gitignore).
+# Union merge means two machines appending different games both keep their
+# lines instead of producing a conflict on the last one.
+careers/**/*.jsonl merge=union
+
+# Binary — never diff or normalize
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.iff   binary
+*.rdat  binary
+
+# Collapse generated/vendored files in diffs and language stats
+uv.lock               linguist-generated=true -diff
+package-lock.json     linguist-generated=true -diff

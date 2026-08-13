@@ -1,0 +1,69 @@
+{
+  "permissions": {
+    "ask": [
+      "PowerShell(git commit *)",
+      "PowerShell(git * commit *)",
+      "PowerShell(git push *)",
+      "PowerShell(git merge *)",
+      "PowerShell(gh api *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git merge *)"
+    ],
+    "allow": [
+      "PowerShell(python *)",
+      "PowerShell(uv *)",
+      "PowerShell(node *)",
+      "PowerShell(npm *)",
+
+      "PowerShell(git status*)",
+      "PowerShell(git diff*)",
+      "PowerShell(git log*)",
+      "PowerShell(git show*)",
+      "PowerShell(git add *)",
+      "PowerShell(git rm *)",
+      "PowerShell(git mv *)",
+      "PowerShell(git branch *)",
+      "PowerShell(git switch *)",
+      "PowerShell(git checkout -b *)",
+      "PowerShell(git check-ignore *)",
+      "PowerShell(git config *)",
+      "PowerShell(git remote *)",
+      "PowerShell(gh pr view *)",
+      "PowerShell(gh pr list*)",
+      "PowerShell(gh run list*)",
+      "PowerShell(gh run view *)",
+
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(Get-Item *)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(Test-Path *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(Copy-Item *)",
+      "PowerShell(Join-Path *)",
+      "PowerShell(Split-Path *)",
+      "PowerShell(Resolve-Path *)",
+      "PowerShell(Select-String *)",
+      "PowerShell(Import-Csv *)",
+      "PowerShell(ConvertFrom-Json *)",
+      "PowerShell(ConvertTo-Json *)",
+      "PowerShell(Where-Object *)",
+      "PowerShell(Select-Object *)",
+      "PowerShell(Sort-Object *)",
+      "PowerShell(Group-Object *)",
+      "PowerShell(Measure-Object *)",
+      "PowerShell(ForEach-Object *)",
+      "PowerShell(Format-Table *)",
+      "PowerShell(Format-List *)",
+
+      "Edit(/**)",
+
+      "WebFetch(domain:www.basketball-reference.com)",
+      "WebFetch(domain:stats.nba.com)",
+      "WebFetch(domain:www.2kratings.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)"
+    ]
+  }
+}

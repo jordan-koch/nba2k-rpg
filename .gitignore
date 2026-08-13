@@ -1,0 +1,78 @@
+# ─── Secrets ──────────────────────────────────────────────────────────────────
+# The repo is private, but treat credentials as if it weren't.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials
+credentials.json
+secrets.yml
+secrets.yaml
+
+# ─── Scratch root ─────────────────────────────────────────────────────────────
+# var/ is the gitignored working root: the SQLite read-model, cached stat pulls,
+# extracted IFF payloads, run state, scratch. Everything here is REGENERABLE —
+# the read-model rebuilds by replaying careers/, caches re-pull with --fetch.
+var/
+
+# Legacy output root used by research/tools/iff.ps1 before var/ existed.
+out/
+
+# ─── Bulk data ────────────────────────────────────────────────────────────────
+# This repo holds code, config, docs, small curated datasets, and the career
+# ledger — never bulk data. Big pulls land in var/cache/ and rebuild on demand.
+*.parquet
+*.avro
+*.orc
+*.duckdb
+*.duckdb.wal
+*.sqlite
+*.sqlite3
+*.db
+
+# ─── Carve-outs ───────────────────────────────────────────────────────────────
+# THE CAREER LEDGER IS TRACKED. This is the one place this repo inverts the
+# usual "state is disposable" rule, and it is deliberate: the 2K save file is
+# encrypted, so there is no upstream to re-ingest from. careers/*/events.jsonl
+# is the ONLY copy of a career. Losing it loses the career. It is append-only
+# JSONL, it diffs cleanly, and a 20-season career is ~1,600 events.
+#
+# Do not add a blanket *.jsonl or *.csv rule above without re-checking these.
+!careers/
+!careers/**
+
+# Small curated/reference datasets are tracked; see datasets/manifest.json.
+!datasets/**
+!research/**/*.csv
+!tests/fixtures/**
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# ─── Node / web app ───────────────────────────────────────────────────────────
+node_modules/
+.vite/
+app/dist/
+
+# ─── Notebooks ────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ─── Editors & OS ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
