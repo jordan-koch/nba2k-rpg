@@ -174,11 +174,30 @@ approval is on screen rather than assumed.
 
 ## Step 6 — Commit
 
-On approval:
+On approval, **write the message to a file and commit with `-F`.** Not `-m`:
 
-```
-git commit -m "<subject>" -m "<body>"
-```
+1. Write the full message — subject, blank line, body — to `var/commit-msg.txt` **using the `Write`
+   tool**, not a shell redirect.
+2. ```
+   git commit -F var/commit-msg.txt
+   ```
+3. Delete the file. `var/` is gitignored, so a leftover is harmless, but a stale message is a trap
+   for the next run.
+
+**Why not `-m`.** Windows PowerShell 5.1 rebuilds the argument list for native executables, and a
+double quote *inside* a here-string or a quoted `-m` argument terminates the argument early. A
+message containing `"..."`, a backtick, or a token that looks like a switch gets split, and git
+receives the fragment as a flag — the observed failure was ``unknown switch `D'`` from a body that
+mentioned `-D`. It fails loudly rather than committing something wrong, but it fails every time and
+the workaround is not obvious mid-commit.
+
+**Why the `Write` tool and not `Out-File`/`Set-Content`.** Both default to UTF-8 **with a BOM** in
+PowerShell 5.1, and git copies the BOM into the message as literal leading characters. `Write`
+emits UTF-8 without one, so em-dashes and accented names survive intact.
+
+`var/commit-msg.txt` is repo-relative on purpose. Never write an absolute path into a tracked file —
+`tests/test_no_leaks.py` fails the build on drive letters and home directories, and this repo is
+public.
 
 Hard rails, no exceptions without an explicit request:
 
