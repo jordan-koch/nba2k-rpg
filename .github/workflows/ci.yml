@@ -28,10 +28,10 @@ jobs:
           cache-dependency-glob: uv.lock
 
       - name: Install
-        # TODO: switch to `uv sync --locked` once uv.lock is generated and
-        # committed (`uv lock` locally). Until then there is no lockfile to
-        # honour and --locked would fail the build. See ops/README.md.
-        run: uv sync
+        # --locked fails the build if uv.lock is stale or absent rather than
+        # silently re-resolving. Changing a dependency in pyproject.toml means
+        # running `uv lock` and committing the result. See ops/README.md.
+        run: uv sync --locked
 
       - name: Ruff — lint
         run: uv run ruff check --output-format=github

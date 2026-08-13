@@ -17,8 +17,9 @@ because of five specific disagreements with its implementation, listed in
 
 ## Status
 
-**Phase 0 — harness.** Process and CI exist; **no application code yet.** The
-first work item is Phase 1's `app-shell`.
+**Phase 0 — harness — complete.** Process, CI, and the local toolchain exist;
+**no application code yet.** The first work item is Phase 1's `app-shell` (1.1).
+Per-item status lives in [`ROADMAP.md`](ROADMAP.md).
 
 ## Stack
 
@@ -71,6 +72,8 @@ Directories appear when their phase does. `careers/`, `datasets/`, `rulesets/`,
   `[OPEN-N]` items are parked deliberately; each has a phase that answers it.
 - **[ROADMAP.md](ROADMAP.md)** — the work breakdown. **Every row is one intake
   item and one feature branch.** ★ marks the nine that earn the full scoping panel.
+  Each row and phase header carries a **Status** — `NOT STARTED` / `IN-PROGRESS` /
+  `DONE` — maintained by `/commit` against the diff, not edited ad hoc.
 - **[docs/decisions/](docs/decisions/)** — read before proposing anything
   substantive. Nine ADRs cover save decryption, ingestion, the ledger, rulesets,
   the training subsystem, draft tiers, repo scope, cost-side-only builds, and
