@@ -19,7 +19,7 @@ jobs:
     name: Lint, types, tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v6
@@ -50,7 +50,7 @@ jobs:
     name: Secret scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           # Full history — a secret removed from HEAD is still a leaked secret.
           fetch-depth: 0
