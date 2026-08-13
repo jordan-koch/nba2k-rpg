@@ -164,7 +164,8 @@ Then exit by verdict:
   for `actually-a-feature`, point at `/make-feature-request`.
 
 Per project convention, **agents commit only through `/commit`** — never `git commit` ad hoc, and never
-merge or push. End the turn by suggesting `/commit`. Any subagent you spawn gets **read-only git**
+merge. `/commit` pushes the branch itself; opening the PR stays the user's. End the turn by suggesting
+`/commit`. Any subagent you spawn gets **read-only git**
 (never checkout/reset/restore/clean/stash/commit).
 
 ---
