@@ -6,9 +6,10 @@ description: >-
   repo — never run `git commit` ad hoc. Use it whenever a unit of work is finished: "commit this",
   "commit the changes", "let's land this", "/commit", or as the natural end of a pipeline stage.
   It stages deliberately (never a blind `git add -A`), refuses to stage secrets or bulk data, runs
-  the doc-drift checks proportionally to what changed, proposes a message, and asks before writing
-  anything. It does NOT push and does NOT open a PR — those stay yours. It does NOT run lint,
-  types, tests; CI owns those and runs them on the PR.
+  the doc-drift checks proportionally to what changed, keeps `ROADMAP.md`'s per-item completion
+  statuses in step with what actually landed, proposes a message, and asks before writing anything.
+  It does NOT push and does NOT open a PR — those stay yours. It does NOT run lint, types, tests;
+  CI owns those and runs them on the PR.
 ---
 
 # Commit
@@ -104,13 +105,51 @@ If `/update-docs` flags something needing your judgment — a superseded ADR, a 
 **stop and surface it.** Those are not commit-blockers by policy, but they're decisions, and a
 commit is a bad place to make one silently.
 
-## Step 4 — Propose, then ask
+## Step 4 — Roadmap status
 
-Show the user three things:
+`ROADMAP.md` carries a **Status** column on every phase item — `NOT STARTED` ·
+`IN-PROGRESS` · `DONE` — plus an aggregate on each phase header. **This skill owns
+keeping those true.** Nowhere else in the pipeline is guaranteed to run at the moment work
+actually lands, so if the gate doesn't advance them, they rot.
+
+Check the staged diff against the roadmap rows and update in the same commit:
+
+| Signal in the diff | Status becomes |
+|---|---|
+| First commit toward an item — partial deliverable, scaffolding, a `requests/` artifact opened for it | `IN-PROGRESS` |
+| The item's **Deliverable** column is fully satisfied by what's now in the tree | `DONE` |
+| Nothing matches a roadmap row | Leave every status alone |
+
+**Match on the deliverable, not the branch name.** A branch called `app-shell` that only lands a
+`FEATURE_REQUEST` has started 1.1, not finished it. Read the Deliverable cell and ask whether the
+tree now contains all of it.
+
+**Phase headers are derived, not independent.** A phase goes `IN-PROGRESS` when any item is, and
+`DONE` only when *every* item is `DONE` **and** the phase's stated **Exit** condition has actually
+been met — the exit is a separate claim from the item list and is often the thing not yet true.
+When you mark a phase `DONE`, stamp the date on its `**Status:**` line.
+
+Two rails, because this column is a record rather than a plan:
+
+- **Never mark ahead.** An item is `DONE` when the commit that completes it is being made, not when
+  a plan says it will be.
+- **Never mark down silently.** If work already recorded as `DONE` looks regressed or reverted,
+  stop and surface it. Walking a status backwards is a decision, not bookkeeping.
+
+If the change is a doc edit, a typo fix, or otherwise maps to no roadmap row, say "no roadmap
+change" and move on. Most commits are this.
+
+Stage `ROADMAP.md` by path if you edited it — the status belongs in the same commit as the work it
+describes, not in a tidy-up commit afterwards.
+
+## Step 5 — Propose, then ask
+
+Show the user four things:
 
 ```
 STAGED    — the file list, grouped by area, with the stat line
 DOCS      — what the drift check did: updated / flagged / clean
+ROADMAP   — which items moved, and to what — or "no roadmap change"
 MESSAGE   — the proposed commit message
 ```
 
@@ -129,7 +168,7 @@ requests rather than ~60k. Fixtures cover 2019-20 (bubble) and 2011-12
 Then **ask, explicitly, and wait.** Not a rhetorical "shall I commit?" trailing a wall of text — a
 real question with the staged list visible above it. The user's yes is the gate.
 
-## Step 5 — Commit
+## Step 6 — Commit
 
 On approval:
 
@@ -143,7 +182,8 @@ Hard rails, no exceptions without an explicit request:
 - **Never `--amend`.** Amending rewrites history that may already be pushed. A follow-up commit is
   almost always right; if the user genuinely wants an amend, they'll say so.
 - **Never `push`.** Pushing publishes to a public repo — outward-facing, and the user's call.
-- **Never `-A` at this stage.** Staging happened in Step 2, deliberately.
+- **Never `-A` at this stage.** Staging happened in Step 2, deliberately — plus the doc and
+  roadmap files you edited in Steps 3–4, staged by path.
 
 Then report the short SHA and hand back the push command:
 
@@ -162,4 +202,6 @@ If the branch has no upstream yet, say so — the `-u` matters and is easy to fo
 - **The message describes the diff.** Someone reading `git log` in six months learns why, not just
   what.
 - **The doc check was sized to the change.** Full sweep on a new model; link check on a typo fix.
+- **`ROADMAP.md` still describes reality.** An item that finished is `DONE` in the same commit that
+  finished it — never marked ahead of the work, never walked backwards without asking.
 - **It committed and stopped.** No push, no PR, no amend, no `--no-verify`.

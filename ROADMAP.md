@@ -120,100 +120,114 @@ Every row below is intended to be one intake item and one feature branch.
 **Size:** `S` a sitting · `M` a day or so · `L` multi-day.
 **Panel:** ★ means the decision is expensive to reverse — run the full scoping
 panel. Unmarked items should skip straight to a plan or straight to work.
+**Status:** `NOT STARTED` · `IN-PROGRESS` · `DONE`. Every item row carries one,
+and every phase header carries the aggregate. A phase is `DONE` only when all of
+its items are and its **Exit** condition has actually been met.
 
-### Phase 0 — Harness
+> **This table is maintained by [`/commit`](.claude/skills/commit/SKILL.md).**
+> The commit gate checks the staged diff against these rows and advances the
+> statuses in the same commit as the work. Statuses are a record of what landed,
+> not a plan — don't mark an item `DONE` ahead of its commit.
+
+### Phase 0 — Harness — **DONE**
 
 **Proves:** nothing. It's the workbench.
 **Exit:** a green CI run on an empty repo, and every document doing one job.
+**Status:** **DONE** — 2026-08-12. Exit met: CI green, branch protection on,
+documents split to one job each.
 
-| # | Item | Deliverable | Size | Needs |
-|---|---|---|---|---|
-| 0.1 | `repo-init` | git init, GitHub remote, `.gitignore`, `.gitattributes`, README skeleton | S | — |
-| 0.2 | `python-toolchain` | `pyproject.toml` (uv/ruff/mypy strict/pytest), `src/` package, first structural test | S | 0.1 |
-| 0.3 | `ci-harness` | GitHub Actions, branch protection, dependabot, secret scan | S | 0.2 |
-| 0.4 | `request-tracks` | `requests/` three tracks, READMEs, Index convention | S | 0.1 |
-| 0.5 | `skills-port` | `.claude/skills/` ported from `nba-analysis` + `settings.json` | M | 0.4 |
-| 0.6 | `docs-split` | 7 ADRs extracted, `docs/data-access.md` written, `DESIGN.md` shrunk to open work | M | 0.1 |
+| # | Item | Deliverable | Size | Needs | Status |
+|---|---|---|---|---|---|
+| 0.1 | `repo-init` | git init, GitHub remote, `.gitignore`, `.gitattributes`, README skeleton | S | — | DONE |
+| 0.2 | `python-toolchain` | `pyproject.toml` (uv/ruff/mypy strict/pytest), `src/` package, first structural test | S | 0.1 | DONE |
+| 0.3 | `ci-harness` | GitHub Actions, branch protection, dependabot, secret scan | S | 0.2 | DONE |
+| 0.4 | `request-tracks` | `requests/` three tracks, READMEs, Index convention | S | 0.1 | DONE |
+| 0.5 | `skills-port` | `.claude/skills/` ported from `nba-analysis` + `settings.json` | M | 0.4 | DONE |
+| 0.6 | `docs-split` | 7 ADRs extracted, `docs/data-access.md` written, `DESIGN.md` shrunk to open work | M | 0.1 | DONE |
 
 *Note on 0.6:* the offseason-training ADR must state explicitly why it is not the
 practice subsystem `DESIGN.md` rejected.
 
-### Phase 1 — Skeleton
+### Phase 1 — Skeleton — **NOT STARTED**
 
 **Proves:** the architecture, and whether the loop is any fun.
 **Exit:** two careers, ten box scores each, one correction, a spend, a worksheet
 applied in-game.
+**Status:** **NOT STARTED** — next up is 1.1 `app-shell`.
 
 The economy here is **deliberately fake** — placeholder XP, invented expectation,
 guessed affinity numbers. Finding out whether the loop is satisfying comes before
 calibrating it.
 
-| # | Item | Deliverable | Size | Needs |
-|---|---|---|---|---|
-| 1.1 | `app-shell` | FastAPI + React/Vite wiring, dev server, health endpoint, frontend build in CI | M | 0.3 |
-| 1.2 | `career-ledger` ★ | Event schema, JSONL append, career directory layout, the fold, replay-determinism test | L | 0.2 |
-| 1.3 | `correction-by-append` ★ | Superseding-event model so edits and deletes never mutate history | M | 1.2 |
-| 1.4 | `ruleset-loader` | Versioned ruleset config; every event pins the version live at the time | M | 1.2 |
-| 1.5 | `player-model` | Attributes, badges, vitals, position — the state the fold produces | M | 1.2 |
-| 1.6 | `placeholder-economy` | Fake XP formula, fake expectation, guessed affinity table, behind the ruleset interface | M | 1.4, 1.5 |
-| 1.7 | `player-creation` | Creation inputs → starting vector. API + UI | M | 1.6 |
-| 1.8 | `box-score-entry` | `BoxScore` DTO, validation, submit endpoint, entry form | M | 1.6 |
-| 1.9 | `spend-and-worksheet` | Price browse, purchase, worksheet diff output. API + UI | M | 1.6 |
-| 1.10 | `career-switching` | Career list, create, switch, archive. Multi-career UI | S | 1.7 |
-| 1.11 | `game-correction-ui` | Edit a mis-entered box score through the append path | S | 1.3, 1.8 |
+| # | Item | Deliverable | Size | Needs | Status |
+|---|---|---|---|---|---|
+| 1.1 | `app-shell` | FastAPI + React/Vite wiring, dev server, health endpoint, frontend build in CI | M | 0.3 | NOT STARTED |
+| 1.2 | `career-ledger` ★ | Event schema, JSONL append, career directory layout, the fold, replay-determinism test | L | 0.2 | NOT STARTED |
+| 1.3 | `correction-by-append` ★ | Superseding-event model so edits and deletes never mutate history | M | 1.2 | NOT STARTED |
+| 1.4 | `ruleset-loader` | Versioned ruleset config; every event pins the version live at the time | M | 1.2 | NOT STARTED |
+| 1.5 | `player-model` | Attributes, badges, vitals, position — the state the fold produces | M | 1.2 | NOT STARTED |
+| 1.6 | `placeholder-economy` | Fake XP formula, fake expectation, guessed affinity table, behind the ruleset interface | M | 1.4, 1.5 | NOT STARTED |
+| 1.7 | `player-creation` | Creation inputs → starting vector. API + UI | M | 1.6 | NOT STARTED |
+| 1.8 | `box-score-entry` | `BoxScore` DTO, validation, submit endpoint, entry form | M | 1.6 | NOT STARTED |
+| 1.9 | `spend-and-worksheet` | Price browse, purchase, worksheet diff output. API + UI | M | 1.6 | NOT STARTED |
+| 1.10 | `career-switching` | Career list, create, switch, archive. Multi-career UI | S | 1.7 | NOT STARTED |
+| 1.11 | `game-correction-ui` | Edit a mis-entered box score through the append path | S | 1.3, 1.8 | NOT STARTED |
 
 *Multi-career is a structural constraint across all of Phase 1, not item 1.10.*
 *Every event carries a career id from 1.2 onward; 1.10 is only its UI.*
 
-### Phase 2 — Economy
+### Phase 2 — Economy — **NOT STARTED**
 
 **Proves:** the numbers mean something, and a ruleset swap is a config change
 rather than a migration.
 **Exit:** a Phase 1 career replays under the real ruleset with no data migration.
 **Resolves:** **[OPEN-2]**, **[OPEN-7]**, **[OPEN-8]**, authored half of **[OPEN-4]**.
+**Status:** **NOT STARTED**.
 
-| # | Item | Deliverable | Size | Needs |
-|---|---|---|---|---|
-| 2.1 | `datasets-layer` | `datasets/manifest.json`, `lib/paths.py`, resolve-by-name, `hub`/`spoke`/`curated`/`report` | M | 0.2 |
-| 2.2 | `nba-boxscore-source` | Builder pulling real NBA box scores to `datasets/spoke/`, cached, `--fetch` | L | 2.1 |
-| 2.3 | `expectation-model` ★ | Expected production given rating, position, minutes, with small-sample shrinkage | L | 2.2 |
-| 2.4 | `ratings-cross-section` | Builder pulling external 2K ratings with height/weight/wingspan | M | 2.1 |
-| 2.5 | `vitals-affinity-fit` ★ | Regress attributes on height/weight/plus-wingspan → the vitals multiplier layer | L | 2.4 |
-| 2.6 | `archetype-tables` ★ | Enumerate archetypes, author the archetype layer, settle the combination rule | L | 2.5 |
-| 2.7 | `attribute-cost-curve` ★ | Superlinear cost in current rating | M | 1.6 |
-| 2.8 | `economy-swap` ★ | Assemble ruleset v2, swap it in, replay Phase 1 careers, prove no migration | M | 2.3, 2.6, 2.7 |
+| # | Item | Deliverable | Size | Needs | Status |
+|---|---|---|---|---|---|
+| 2.1 | `datasets-layer` | `datasets/manifest.json`, `lib/paths.py`, resolve-by-name, `hub`/`spoke`/`curated`/`report` | M | 0.2 | NOT STARTED |
+| 2.2 | `nba-boxscore-source` | Builder pulling real NBA box scores to `datasets/spoke/`, cached, `--fetch` | L | 2.1 | NOT STARTED |
+| 2.3 | `expectation-model` ★ | Expected production given rating, position, minutes, with small-sample shrinkage | L | 2.2 | NOT STARTED |
+| 2.4 | `ratings-cross-section` | Builder pulling external 2K ratings with height/weight/wingspan | M | 2.1 | NOT STARTED |
+| 2.5 | `vitals-affinity-fit` ★ | Regress attributes on height/weight/plus-wingspan → the vitals multiplier layer | L | 2.4 | NOT STARTED |
+| 2.6 | `archetype-tables` ★ | Enumerate archetypes, author the archetype layer, settle the combination rule | L | 2.5 | NOT STARTED |
+| 2.7 | `attribute-cost-curve` ★ | Superlinear cost in current rating | M | 1.6 | NOT STARTED |
+| 2.8 | `economy-swap` ★ | Assemble ruleset v2, swap it in, replay Phase 1 careers, prove no migration | M | 2.3, 2.6, 2.7 | NOT STARTED |
 
 *Item 2.8 is the architecture's exam. If it needs a migration, the event-sourcing*
 *claim in `DESIGN.md` §6 was never true, and better to learn it here.*
 
-### Phase 3 — Season
+### Phase 3 — Season — **NOT STARTED**
 
 **Proves:** it works over 82 games, not 10 — and the app is genuinely serviceable.
 **Exit:** a full season played end to end, every upgrade earned, no spreadsheets.
 **Resolves:** **[OPEN-5]**.
+**Status:** **NOT STARTED**.
 
-| # | Item | Deliverable | Size | Needs |
-|---|---|---|---|---|
-| 3.1 | `badge-system` ★ | Unlock thresholds, equip budget, loadout management. API + UI | L | 2.8 |
-| 3.2 | `player-dashboard` | The full player state view — attributes, badges, vitals, OVR, XP | M | 2.8 |
-| 3.3 | `game-log` | Browse, filter, and inspect every game entered | M | 2.8 |
-| 3.4 | `progression-history` | Attributes and XP over time — what makes a career legible | M | 3.2 |
-| 3.5 | `fast-entry` | Keyboard-driven entry tuned to survive 82 repetitions | M | 3.3 |
+| # | Item | Deliverable | Size | Needs | Status |
+|---|---|---|---|---|---|
+| 3.1 | `badge-system` ★ | Unlock thresholds, equip budget, loadout management. API + UI | L | 2.8 | NOT STARTED |
+| 3.2 | `player-dashboard` | The full player state view — attributes, badges, vitals, OVR, XP | M | 2.8 | NOT STARTED |
+| 3.3 | `game-log` | Browse, filter, and inspect every game entered | M | 2.8 | NOT STARTED |
+| 3.4 | `progression-history` | Attributes and XP over time — what makes a career legible | M | 3.2 | NOT STARTED |
+| 3.5 | `fast-entry` | Keyboard-driven entry tuned to survive 82 repetitions | M | 3.3 | NOT STARTED |
 
-### Phase 4 — Career → **v1**
+### Phase 4 — Career → **v1** — **NOT STARTED**
 
 **Proves:** a career is more than a long season.
 **Exit:** **v1.**
 **Resolves:** **[OPEN-3]**.
+**Status:** **NOT STARTED**.
 
-| # | Item | Deliverable | Size | Needs |
-|---|---|---|---|---|
-| 4.1 | `season-rollover` | Season boundary event, age increment, per-season and career totals | M | 3.5 |
-| 4.2 | `offseason-training` | The training block and its payout; straight into the next season | M | 4.1 |
-| 4.3 | `milestones-derived` | Threshold definitions and detection folded from the event log | M | 4.1 |
-| 4.4 | `accolade-entry` | Manual accolade event type + entry UI for what the engine can't see | M | 4.1 |
-| 4.5 | `milestone-tracker` | Hit, close, and unclaimed — plus the windfall spend | M | 4.3, 4.4 |
-| 4.6 | `career-comparison` | Two careers side by side. The instrument **P2** is measured with | M | 4.1 |
+| # | Item | Deliverable | Size | Needs | Status |
+|---|---|---|---|---|---|
+| 4.1 | `season-rollover` | Season boundary event, age increment, per-season and career totals | M | 3.5 | NOT STARTED |
+| 4.2 | `offseason-training` | The training block and its payout; straight into the next season | M | 4.1 | NOT STARTED |
+| 4.3 | `milestones-derived` | Threshold definitions and detection folded from the event log | M | 4.1 | NOT STARTED |
+| 4.4 | `accolade-entry` | Manual accolade event type + entry UI for what the engine can't see | M | 4.1 | NOT STARTED |
+| 4.5 | `milestone-tracker` | Hit, close, and unclaimed — plus the windfall spend | M | 4.3, 4.4 | NOT STARTED |
+| 4.6 | `career-comparison` | Two careers side by side. The instrument **P2** is measured with | M | 4.1 | NOT STARTED |
 
 ### Post-v1
 
@@ -228,8 +242,8 @@ decode, only if external ratings prove inadequate. OCR. Hot zones.
 ## Shape of it
 
 ```
-Phase 0   Harness      ░     workbench
-Phase 1   Skeleton     ███   is it fun?
+Phase 0   Harness      ░     workbench                                  ← done
+Phase 1   Skeleton     ███   is it fun?                                 ← here
 Phase 2   Economy      ████  do the numbers mean anything?
 Phase 3   Season       ███   does it survive 82 games?
 Phase 4   Career       ███   is a career more than a long season?     ← v1

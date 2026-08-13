@@ -74,20 +74,20 @@ Directories appear when their phase does. `careers/`, `datasets/`, `rulesets/`,
 ## Setup
 
 ```powershell
-winget install --id=astral-sh.uv -e   # not yet installed on the dev machine
-uv lock
-uv sync
+winget install --id=astral-sh.uv -e   # once; open a new shell afterwards for PATH
+uv sync                               # from the tracked uv.lock
 uv run pytest
 ```
 
-See [ops/README.md](ops/README.md) for branch protection and the CI lockfile note.
+See [ops/README.md](ops/README.md) for branch protection, the full local check
+list, and the lockfile rule.
 
 ## Status
 
 | Phase | | |
 |---|---|---|
-| **0 — Harness** | workbench | in progress |
-| 1 — Skeleton | is it fun? | |
+| 0 — Harness | workbench | **done** |
+| **1 — Skeleton** | is it fun? | next |
 | 2 — Economy | do the numbers mean anything? | |
 | 3 — Season | does it survive 82 games? | |
 | 4 — Career | is a career more than a long season? | **← v1** |
