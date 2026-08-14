@@ -87,7 +87,7 @@ list, and the lockfile rule.
 | Phase | | |
 |---|---|---|
 | 0 — Harness | workbench | **done** |
-| **1 — Skeleton** | is it fun? | next |
+| **1 — Skeleton** | is it fun? | in progress |
 | 2 — Economy | do the numbers mean anything? | |
 | 3 — Season | does it survive 82 games? | |
 | 4 — Career | is a career more than a long season? | **← v1** |

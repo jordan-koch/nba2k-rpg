@@ -148,12 +148,13 @@ documents split to one job each.
 *Note on 0.6:* the offseason-training ADR must state explicitly why it is not the
 practice subsystem `DESIGN.md` rejected.
 
-### Phase 1 — Skeleton — **NOT STARTED**
+### Phase 1 — Skeleton — **IN-PROGRESS**
 
 **Proves:** the architecture, and whether the loop is any fun.
 **Exit:** two careers, ten box scores each, one correction, a spend, a worksheet
 applied in-game.
-**Status:** **NOT STARTED** — next up is 1.1 `app-shell`.
+**Status:** **IN-PROGRESS** — 1.1 `app-shell` is at intake. No application code
+has landed yet.
 
 The economy here is **deliberately fake** — placeholder XP, invented expectation,
 guessed affinity numbers. Finding out whether the loop is satisfying comes before
@@ -161,7 +162,7 @@ calibrating it.
 
 | # | Item | Deliverable | Size | Needs | Status |
 |---|---|---|---|---|---|
-| 1.1 | `app-shell` | FastAPI + React/Vite wiring, dev server, health endpoint, frontend build in CI | M | 0.3 | NOT STARTED |
+| 1.1 | `app-shell` | FastAPI + React/Vite wiring, dev server, health endpoint, frontend build in CI | M | 0.3 | IN-PROGRESS |
 | 1.2 | `career-ledger` ★ | Event schema, JSONL append, career directory layout, the fold, replay-determinism test | L | 0.2 | NOT STARTED |
 | 1.3 | `correction-by-append` ★ | Superseding-event model so edits and deletes never mutate history | M | 1.2 | NOT STARTED |
 | 1.4 | `ruleset-loader` | Versioned ruleset config; every event pins the version live at the time | M | 1.2 | NOT STARTED |
