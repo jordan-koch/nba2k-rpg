@@ -1,4 +1,4 @@
-> **Status:** intake · created 2026-08-13 · open · next: scope
+> **Status:** scoped · created 2026-08-13 · decided · next: plan
 
 # Feature Request — App Shell (Phase 1, item 1.1)
 
