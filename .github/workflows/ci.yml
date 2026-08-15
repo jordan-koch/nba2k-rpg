@@ -46,6 +46,97 @@ jobs:
         # -m "not network" keeps live external pulls out of CI.
         run: uv run pytest -m "not network" --cov=rpg_core --cov=rpg_api --cov-report=term-missing
 
+  web:
+    # This display name is a REQUIRED CONTEXT. It must stay character-identical
+    # to its entry in ops/branch-protection.json, and tests/test_ci_contexts.py
+    # fails the build if the two ever drift. Renaming it here alone leaves every
+    # PR pending forever on a check that never reports.
+    name: Web app
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          # GOTCHA: defaults.run.working-directory applies only to `run:` steps,
+          # never to `uses:` inputs — so this path is REPO-ROOT-relative. A wrong
+          # value here does not fail the build, it silently disables caching, and
+          # cancel-in-progress means the job re-runs on every push.
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install
+        # Fails when package.json and package-lock.json disagree, exactly as
+        # `uv sync --locked` does. See ops/README.md.
+        run: npm ci
+
+      - name: Typecheck
+        # Separate from the build on purpose: `vite build` strips types with
+        # esbuild and never typechecks, so a green build proves nothing here.
+        run: npm run typecheck
+
+      - name: Typecheck — negative
+        # Proves `strict` is actually engaged by requiring the ill-typed fixture
+        # to be REJECTED. Guards against a config that silently checks nothing.
+        run: npm run check:negative
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify the build produced an entry point
+        run: test -f dist/index.html
+
+      # ─── Real-server smoke ──────────────────────────────────────────────
+      # The only check that exercises uvicorn, the filesystem serve, and the
+      # built artifact together. TestClient exercises none of the three.
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install the Python side
+        working-directory: .
+        run: uv sync --locked
+
+      - name: Smoke — serve the built SPA and curl both routes
+        working-directory: .
+        run: |
+          set -euo pipefail
+
+          uv run rpg-serve &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          # Bounded readiness poll with an explicit exhaustion failure — never a
+          # fixed sleep, which is either flaky or slow and usually both.
+          # --retry-connrefused is what makes curl wait for the socket to open;
+          # if the retries run out, curl exits non-zero and set -e fails the step.
+          curl --silent --show-error --fail \
+               --retry 30 --retry-delay 1 --retry-connrefused --max-time 60 \
+               --output /dev/null http://127.0.0.1:8000/api/health
+
+          health="$(curl --silent --fail http://127.0.0.1:8000/api/health)"
+          echo "GET /api/health -> $health"
+          echo "$health" | grep -q '"status": *"ok"'
+
+          root="$(curl --silent --fail --output /dev/null \
+                       --write-out '%{http_code} %{content_type}' \
+                       http://127.0.0.1:8000/)"
+          echo "GET / -> $root"
+          echo "$root" | grep -q '^200 text/html'
+
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest
