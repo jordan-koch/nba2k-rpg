@@ -82,6 +82,9 @@ entire CORS story — there is no CORS middleware, deliberately.
   item and one feature branch.** ★ marks the nine that earn the full scoping panel.
   Each row and phase header carries a **Status** — `NOT STARTED` / `IN-PROGRESS` /
   `DONE` — maintained by `/commit` against the diff, not edited ad hoc.
+  **`H` rows are harness work** — outside the numbered items, same Status rules,
+  ordered by `Needs`/`Blocks` rather than position. A `Blocks` cell is binding:
+  it names the item that may not start until the harness row lands.
 - **[docs/decisions/](docs/decisions/)** — read before proposing anything
   substantive. Nine ADRs cover save decryption, ingestion, the ledger, rulesets,
   the training subsystem, draft tiers, repo scope, cost-side-only builds, and

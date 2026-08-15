@@ -123,6 +123,14 @@ panel. Unmarked items should skip straight to a plan or straight to work.
 **Status:** `NOT STARTED` · `IN-PROGRESS` · `DONE`. Every item row carries one,
 and every phase header carries the aggregate. A phase is `DONE` only when all of
 its items are and its **Exit** condition has actually been met.
+**Harness:** `H` rows are infrastructure — the tooling that keeps this project
+buildable as it grows, added when it's needed rather than up front. They sit
+outside the numbered items, carry the same Status discipline, and are sequenced
+by **Needs** and **Blocks** rather than by position. `Blocks` is the point: a
+harness item that merely *should* happen before some feature loses to enthusiasm
+every time, so it names the row it gates instead. Kept legible as a category on
+purpose — if the harness ever starts outgrowing the game, the row count is where
+that shows up first.
 
 > **This table is maintained by [`/commit`](.claude/skills/commit/SKILL.md).**
 > The commit gate checks the staged diff against these rows and advances the
@@ -176,6 +184,35 @@ calibrating it.
 
 *Multi-career is a structural constraint across all of Phase 1, not item 1.10.*
 *Every event carries a career id from 1.2 onward; 1.10 is only its UI.*
+
+#### Harness — Phase 1
+
+| # | Item | Deliverable | Size | Needs | Blocks | Status |
+|---|---|---|---|---|---|---|
+| H1 | `escalation-queue` | `ESCALATIONS.md`, the parked-decision format, and a structural test that every entry names a real roadmap item | S | — | 1.3 | NOT STARTED |
+| H2 | `domain-engineer` | Write-capable subagent for `src/`: definition, rulebook, spawn protocol, fixed-section return contract | M | 1.2 | 1.4 | NOT STARTED |
+
+*Why H1 exists.* Item 1.1 surfaced the real constraint, and it wasn't build
+speed — it was that **every decision arrived synchronously and interrupted**.
+Eight of them in one sitting. A queue decouples deciding from building, which is
+worth having at zero agents; it is also what lets any future worker *park* a
+question instead of guessing at it.
+
+*Why H2 needs 1.2.* An agent rulebook earns its keep by encoding specifics that
+were expensive to learn. Written before the ledger exists it can only paraphrase
+the ADR index; written after 1.2 it can carry what actually bit.
+
+*Why H2 blocks 1.4 and not 1.3.* 1.4 `ruleset-loader` is the right first
+delegation — unstarred, `M`, and [ADR 0004](docs/decisions/0004-rulesets-as-versioned-config.md)
+already fixes its contract. Both 1.2 and 1.3 are ★ and stay in the main thread,
+which also means H2 gets two items of evidence rather than one.
+
+*Parked, not scheduled.* A serviceability gate for the web UI, a design/UX
+specialist, and an autonomous stage dispatcher are deliberately **not** rows
+here. Each is a hypothesis with a named moment to re-decide, and H1 builds the
+queue that holds them. Note that "serviceable" is already a v1 constraint in
+both directions (see §v1) and is nowhere defined or tested — that, rather than
+design polish, is what a gate would be for.
 
 ### Phase 2 — Economy — **NOT STARTED**
 
