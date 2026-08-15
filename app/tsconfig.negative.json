@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+
+  /* BOTH keys are overridden, and the `exclude` reset is the load-bearing one.
+     A child config INHERITS its parent's `exclude` rather than resetting it,
+     so without `"exclude": []` this project resolves to zero input files, tsc
+     exits non-zero with TS18003 ("No inputs were found"), and the wrapper
+     reports success — meaning the negative check would pass because the config
+     found nothing, not because `strict` caught the fixture. That is precisely
+     the false green this check exists to rule out, which is why
+     scripts/check-negative.mjs asserts TS18003 is absent from the output. */
+  "include": ["typecheck-fixtures"],
+  "exclude": []
+}
