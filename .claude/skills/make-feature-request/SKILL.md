@@ -148,6 +148,25 @@ the touched subsystem and the concrete files/datasets a cold scoping agent reads
 Step 2's grounding, carried into the request). *Open Questions* may be empty only if you
 genuinely surfaced none (say so). *Rough Ideas* is the one section to drop when there are none.
 
+**Then decide the Stage plan — the last section you write, and never optional.** Per
+[ADR 0010](../../../docs/decisions/0010-panels-by-default.md) the full pipeline is the
+**default**; a skip is an exception you argue for. Check the three hard triggers in
+[`requests/README.md`](../../../requests/README.md) against the request you just wrote — any one
+of them fires and the panel runs, with no argument available:
+
+1. **Open Questions came out non-empty.**
+2. **Explicitly out couldn't be filled.**
+3. **It touches something expensive to reverse** — a settled ADR, a pillar, the event schema, a
+   dataset contract, or anything another roadmap item pins.
+
+Clear all three and you may *propose* a skip, stating which triggers it cleared and why the work
+is genuinely bounded. The user disposes it at the Step 5 handoff.
+
+> **Note the incentive this creates, and don't take it.** Triggers 1 and 2 are sections *you*
+> just wrote, so under-reporting an open question or hand-waving an *Explicitly out* is now the
+> path to less ceremony. That is the one dishonesty this rule can't catch mechanically. Write
+> those two sections as if the Stage plan didn't exist — then read them.
+
 ```markdown
 > **Status:** intake · created <YYYY-MM-DD> · open · next: scope
 
@@ -186,6 +205,16 @@ update semantics, extraction cost. Scoping decides them; intake makes sure they'
 ## Open Questions for Scoping
 <The genuinely unresolved decisions to hand downstream. Don't paper over them — naming them
 is more useful than a false sense of certainty.>
+
+## Stage plan
+<REQUIRED, and written last. State which stages run. The default is all four.
+
+If the panel runs, one line is enough — name the trigger that fired:
+  "Full pipeline. Trigger 3: defines the event schema every later item pins."
+
+If proposing a skip, argue it: name all three triggers and how each was cleared, and say what
+makes the work bounded. Stage 4 still runs in direct-build mode, with this request standing in
+for the plan.>
 ```
 
 ## Step 5 — Confirm, record, hand off
@@ -200,8 +229,11 @@ is more useful than a false sense of certainty.>
    cell mirrors it (`intake` is just the initial value — downstream stages advance both). If the
    *feature itself* is a pipeline stage (e.g. a request to build another skill), say so in the
    Notes so the row isn't confused with this request's own intake stage.
-3. Point at the next step: *"Run `/scope-feature` when you're ready to scope this."* Don't
-   start scoping yourself — that's a separate, human-gated stage.
+3. Point at the next step, and **lead with the Stage plan** — it's the one thing here the user
+   may want to overrule. If the panel runs (the default): *"Run `/scope-feature` when you're
+   ready to scope this."* If you proposed a skip, **say so explicitly and show the argument**,
+   so the exception is visible rather than inferred from what you didn't do. Either way, don't
+   start the next stage yourself — that's a separate, human-gated stage.
 
 Per project convention, **agents commit only through `/commit`** — never `git commit` ad hoc. End
 your turn by suggesting `/commit` when the user wants the request landed.
@@ -226,3 +258,6 @@ your turn by suggesting `/commit` when the user wants the request landed.
   don't fabricate decisions intake isn't equipped to make.
 - **Right altitude.** It says *what* and *why*, gestures at *how*, and stops. The how is
   scoping's and planning's job — over-specifying here just pre-commits to one path.
+- **The Stage plan argues, or it says "full pipeline" and stops.** A skip proposed without
+  naming all three cleared triggers is not an argument, it's a preference. When in doubt, the
+  panel runs — that's the default precisely so the uncertain case resolves without a debate.

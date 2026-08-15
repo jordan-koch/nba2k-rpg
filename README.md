@@ -60,7 +60,7 @@ nba2k-rpg/
 ├── CLAUDE.md          Onboarding map + the rules to work by
 ├── docs/
 │   ├── data-access.md   What can be read, from where, how confident we are
-│   └── decisions/       ADRs — nine settled calls and what each cost
+│   └── decisions/       ADRs — ten settled calls and what each cost
 ├── requests/          Work intake — three tracks (feature / bugfix / calibration)
 ├── .claude/skills/    The pipeline stages, plus /commit
 ├── src/rpg_core/      Domain core — I/O-free, web-free. Empty until item 1.2

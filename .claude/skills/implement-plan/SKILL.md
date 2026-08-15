@@ -12,9 +12,11 @@ description: >-
   NOT use this to re-plan (that's /create-implementation-plan) or re-scope (/scope-feature), and do NOT
   use it for basketball analysis questions. It serves BOTH tracks — a feature's
   IMPLEMENTATION_PLAN (under requests/feature-requests/) or a bugfix's (under requests/bugfix-requests/), auto-detected from
-  the path; for a bugfix run, "done" = the red repro goes green + a regression test is left behind. If no
-  IMPLEMENTATION_PLAN.md exists yet, send the user to /create-implementation-plan first (or /scope-feature
-  / /diagnose-bug if there isn't even a decided upstream artifact).
+  the path; for a bugfix run, "done" = the red repro goes green + a regression test is left behind. It also
+  has a DIRECT-BUILD MODE for work whose intake artifact carries an argued stage skip (ADR 0010): the
+  request stands in for the plan and the adversarial panel runs at full strength on the diff. If there is
+  no IMPLEMENTATION_PLAN.md and no argued skip, send the user to /create-implementation-plan first (or
+  /scope-feature / /diagnose-bug if there isn't even a decided upstream artifact).
 ---
 
 # Implement Plan
@@ -60,9 +62,31 @@ This stage executes one specific **`IMPLEMENTATION_PLAN.md`** — on either trac
   cross-check against the artifact's own Status blockquote (the source of truth). **If you inferred the
   slug, echo back the exact path + title and get a yes before launching** — this run *mutates the repo*,
   so it's the heaviest of all four stages.
-- **If no `IMPLEMENTATION_PLAN.md` exists, stop** and send the user to `/create-implementation-plan`
-  (or back to `/scope-feature` / `/diagnose-bug` if there isn't even a decided upstream artifact).
-  Implementing an unplanned change builds work nobody sequenced.
+- **If no `IMPLEMENTATION_PLAN.md` exists, check for an argued skip before stopping.** Per
+  [ADR 0010](../../../docs/decisions/0010-panels-by-default.md) the panel stages are the default, but
+  an intake artifact may carry a **Stage plan** section arguing a skip. Open it and read that section:
+
+  - **An argued skip, disposed by the user** → **direct-build mode** (below). The intake artifact is
+    the statement of intent; its Status blockquote should read `… · decided · next: implement`.
+  - **No Stage plan section, or one that proposes the full pipeline, or a skip the user hasn't
+    disposed** → **stop** and send the user to `/create-implementation-plan` (or back to
+    `/scope-feature` / `/diagnose-bug` if there isn't even a decided upstream artifact).
+
+  **This branch is not a shortcut, and must not become one.** Implementing an unplanned change still
+  builds work nobody sequenced — the *only* thing that makes it legitimate is an argument someone
+  wrote down and the user disposed. A missing plan is not by itself permission; a missing plan plus a
+  missing Stage plan is the case this stage refuses.
+
+**Direct-build mode.** Everything downstream is unchanged except what the panel is handed:
+`planPath` takes the **intake artifact** (`FEATURE_REQUEST.md` or `ROOT_CAUSE_ANALYSIS.md`) and
+`scopePath` is **omitted** — the panel already degrades to a single intent document. Step 3's
+phase-by-phase walk becomes a straight build against the request's Desired Outcome and Scope
+Signals; honor *Explicitly out* as the boundary a plan's §7 checklist would otherwise supply.
+
+Be honest about what the ledger then is: criteria **derived** from a Desired Outcome, `source:
+request`, not a promise-kept check against numbered criteria. That's expected — an item needing
+numbered criteria trips ADR 0010's first trigger and never reaches this branch. Say so in the report
+rather than presenting a derived ledger as if it were a scoped one.
 
 **Disposition gate.** The Status blockquote reads `<stage> · created <date> · <open|decided> · next:`.
 Gate on the **3rd field (disposition), not the stage word** — a ready plan reads `plan · … · decided ·
@@ -131,13 +155,19 @@ ran `git checkout` and silently wiped uncommitted work while a vacuous selftest 
 touches. This list drives which **specialist reviewers** the panel spins up — show the user the roster
 before launching.
 
+**The roster self-scales, which is why there is no economy mode.** Specialists are matched to the
+touched areas, so a small change draws the four core reviewers and perhaps one specialist while a
+sprawling one draws the full bench. The size of the work already governs the size of the panel —
+resist adding a "quick" variant, which would be a second and worse control over the same variable
+(ADR 0010). `verifyCap` is the one legitimate lever, and it bounds fan-out, not coverage.
+
 Then run the bundled panel by **absolute** path (resolve repo-root + the segment):
 
 ```
 Workflow({
   scriptPath: "<repo-root>/.claude/skills/implement-plan/acceptance_panel.js",
-  args: { planPath:  "<work-dir>/IMPLEMENTATION_PLAN.md",
-          scopePath: "<work-dir>/<upstream>",   // <upstream> = PROJECT_SCOPE.md | ROOT_CAUSE_ANALYSIS.md — the acceptance source, passed in the scopePath slot; omit if none
+  args: { planPath:  "<work-dir>/IMPLEMENTATION_PLAN.md",   // DIRECT-BUILD MODE: the intake artifact instead — FEATURE_REQUEST.md | ROOT_CAUSE_ANALYSIS.md
+          scopePath: "<work-dir>/<upstream>",   // <upstream> = PROJECT_SCOPE.md | ROOT_CAUSE_ANALYSIS.md — the acceptance source, passed in the scopePath slot; omit if none (always omitted in direct-build mode)
           slug:      "<slug>",
           touchedAreas: ["transform","src", ...],                  // from the bucketing above
           verifyCap: 4 }                                           // OPTIONAL — max verify-batch agents (default 4); raise for a sprawling diff, lower to economize
@@ -240,6 +270,8 @@ re-runs the mechanical gates there; a red check is **stop-and-fix**, not a retry
 # Implementation Report — <Title>
 
 > **One-line outcome:** <what now works> · **Acceptance:** <N>/<N> criteria met · **Branch:** implement/<slug>
+> <direct-build runs add: **Mode:** direct build — no PROJECT_SCOPE/IMPLEMENTATION_PLAN, per the argued
+> Stage plan in the intake artifact. Criteria below are derived from its Desired Outcome.>
 
 ## 1. Acceptance ledger  [Always — the spine]
 <a table: criterion · met / partial / unmet · evidence (command output / file:line). This is the proof.>
@@ -283,7 +315,10 @@ surfaced.>
   an empty findings list on a big diff is a red flag, not a clean bill.
 - **Reviewers never touched the tree.** Read-only subagents, snapshot taken, integrity re-checked after.
 - **The plan was consumed, not re-opened.** You built what stage 3 sequenced; deviations are conscious
-  and recorded, deferred phases stayed deferred.
+  and recorded, deferred phases stayed deferred. In direct-build mode the request's *Explicitly out*
+  is the boundary that a plan's checklist would have been — respect it the same way.
+- **A direct build said it was one.** The report names the mode and the argued skip behind it, and its
+  ledger is labelled as derived from a Desired Outcome rather than dressed up as scoped criteria.
 - **Outward-facing steps went to the human.** Anything that pushes, merges, changes repo settings, or writes to
   prod was staged for the user to run, not executed and "confirmed."
 - **It handed off, it didn't commit.** The user is the committer; the report + `implemented` status
