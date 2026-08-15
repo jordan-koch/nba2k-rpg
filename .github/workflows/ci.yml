@@ -44,7 +44,7 @@ jobs:
 
       - name: Pytest
         # -m "not network" keeps live external pulls out of CI.
-        run: uv run pytest -m "not network" --cov=rpg_core --cov-report=term-missing
+        run: uv run pytest -m "not network" --cov=rpg_core --cov=rpg_api --cov-report=term-missing
 
   secrets:
     name: Secret scan
