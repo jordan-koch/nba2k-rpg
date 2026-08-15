@@ -124,9 +124,13 @@ All nine are ADRs. The ones most often re-proposed:
   to `main` directly.
 - **Agents commit only through `/commit`.** Never run `git commit` ad hoc — not
   for a one-line change, not for an "obviously safe" one.
-- **Agents may push a feature branch and prune a merged one.** Both are
-  recoverable, and making the user type them buys nothing. Still theirs alone:
-  **merge, amend, force-push, and any push to `main`.**
+- **Agents may push a feature branch, open and merge its PR, and prune it after.**
+  All are recoverable, and making the user type them buys nothing. The real gate
+  is on GitHub's side, not here: `enforce_admins: true` means **nobody** merges
+  past a red check, so opening and merging a PR cannot bypass CI. Still theirs
+  alone, and these are the genuinely unrecoverable ones: **amend, force-push, and
+  any push to `main`.** `gh api` also stays prompted — it is the whole REST
+  surface, and re-applying branch protection is rare enough to be worth a human.
 - **Prune only against a verified-merged check — and `-d` is not that check.**
   PRs here land as **squash merges**, so the branch tip is never an ancestor of
   `main` and `git branch -d` refuses every already-merged branch. The check that
