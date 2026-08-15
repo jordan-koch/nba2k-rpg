@@ -166,7 +166,8 @@ practice subsystem `DESIGN.md` rejected.
 **Exit:** two careers, ten box scores each, one correction, a spend, a worksheet
 applied in-game.
 **Status:** **IN-PROGRESS** — 1.1 `app-shell` has landed the application
-skeleton. No domain logic yet; 1.2 `career-ledger` is next.
+skeleton. No domain logic yet. Harness row H1 is in flight; 1.2 `career-ledger`
+is the next numbered item.
 
 The economy here is **deliberately fake** — placeholder XP, invented expectation,
 guessed affinity numbers. Finding out whether the loop is satisfying comes before
@@ -193,7 +194,7 @@ calibrating it.
 
 | # | Item | Deliverable | Needs | Blocks | Status |
 |---|---|---|---|---|---|
-| H1 | `escalation-queue` | `ESCALATIONS.md`, the parked-decision format, and a structural test that every entry names a real roadmap item | — | 1.3 | NOT STARTED |
+| H1 | `escalation-queue` | `ESCALATIONS.md`, the parked-decision format, and a structural test that every entry names a real roadmap item | — | 1.3 | IN-PROGRESS |
 | H2 | `domain-engineer` | Write-capable subagent for `src/`: definition, rulebook, spawn protocol, fixed-section return contract | 1.2 | 1.4 | NOT STARTED |
 
 *Why H1 exists.* Item 1.1 surfaced the real constraint, and it wasn't build
