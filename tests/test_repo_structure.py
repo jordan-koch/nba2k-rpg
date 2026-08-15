@@ -92,6 +92,43 @@ def test_scratch_root_is_gitignored() -> None:
     assert ignored, "var/ must be gitignored — it holds caches and the rebuildable read-model."
 
 
+def test_web_app_build_output_is_ignored_but_sources_are_not() -> None:
+    """The frontend's generated output stays out; its sources stay in.
+
+    The assertion that actually protects something is the **negative** one.
+    `.gitignore` lines 62-63 blanket-match `dist/` and `build/` at *any* depth,
+    so a source file landing under a directory with either name inside `app/`
+    would be silently untracked with nothing complaining — the same class of
+    silent shadowing the career-ledger carve-out above exists to prevent.
+
+    Note `app/dist/` is covered twice, by the blanket `dist/` rule and by its
+    own entry, so this test passing does NOT prove the explicit entry survives.
+    """
+    try:
+        generated = {
+            "app/dist/index.html": _git_check_ignore("app/dist/index.html"),
+            "app/node_modules/react/index.js": _git_check_ignore("app/node_modules/react/index.js"),
+        }
+        sources = {
+            "app/src/main.tsx": _git_check_ignore("app/src/main.tsx"),
+            "app/package.json": _git_check_ignore("app/package.json"),
+            "app/vite.config.ts": _git_check_ignore("app/vite.config.ts"),
+        }
+    except RuntimeError:
+        import pytest
+
+        pytest.skip("git unavailable")
+
+    assert all(generated.values()), (
+        f"Build output must be gitignored: {sorted(k for k, v in generated.items() if not v)}"
+    )
+    assert not any(sources.values()), (
+        "Frontend SOURCE files must be tracked, but git ignores: "
+        f"{sorted(k for k, v in sources.items() if v)}. Check .gitignore for a "
+        "blanket dist/ or build/ rule shadowing them — those match at any depth."
+    )
+
+
 # ─── Process artifacts ────────────────────────────────────────────────────────
 
 
