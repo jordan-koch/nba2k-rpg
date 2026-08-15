@@ -17,6 +17,7 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from rpg_api import health
+from rpg_api.spa import attach_spa
 from rpg_core import __version__
 
 
@@ -40,8 +41,13 @@ def create_app(spa_dist: Path | None = None) -> FastAPI:
     app = FastAPI(title="nba2k-rpg", version=__version__)
 
     # Read per request by both the health payload and the catch-all route.
-    app.state.spa_dist = default_spa_dist() if spa_dist is None else spa_dist
+    dist = default_spa_dist() if spa_dist is None else spa_dist
+    app.state.spa_dist = dist
 
     app.include_router(health.router, prefix="/api")
+
+    # LAST, always. FastAPI matches in registration order, so the catch-all
+    # must come after every real route or it shadows them — see spa.py.
+    attach_spa(app, dist)
 
     return app
