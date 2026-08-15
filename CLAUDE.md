@@ -17,8 +17,10 @@ because of five specific disagreements with its implementation, listed in
 
 ## Status
 
-**Phase 0 — harness — complete.** Process, CI, and the local toolchain exist;
-**no application code yet.** The first work item is Phase 1's `app-shell` (1.1).
+**Phase 0 — harness — complete. Phase 1 — skeleton — in progress.** Item 1.1
+`app-shell` has landed the seam: `src/rpg_api/` (health endpoint, SPA serving)
+and `app/` (React + Vite). **No domain logic yet** — no ledger, no economy, no
+careers; `src/rpg_core/` is still a version string. Next is 1.2 `career-ledger`.
 Per-item status lives in [`ROADMAP.md`](ROADMAP.md).
 
 ## Stack
@@ -55,7 +57,9 @@ docs/
   decisions/          ADRs — nine settled calls
 requests/           Intake — feature-requests / bugfix-requests / calibration-findings
 .claude/skills/     Pipeline stages + /commit
-src/rpg_core/       Domain core — I/O-free, web-free. Empty until Phase 1
+src/rpg_core/       Domain core — I/O-free, web-free. Empty until item 1.2
+src/rpg_api/        HTTP seam — routing, serialization, serving the built SPA
+app/                React + Vite SPA. Every config file scoped to app/
 research/           IFF extraction toolkit + roster sample
 ops/                Branch protection, local toolchain
 tests/              Structural guards
@@ -63,7 +67,11 @@ var/                GITIGNORED — read-model, caches, scratch
 ```
 
 Directories appear when their phase does. `careers/`, `datasets/`, `rulesets/`,
-`lib/`, and the web app don't exist yet — don't create them speculatively.
+and `lib/` don't exist yet — don't create them speculatively.
+
+**Two run modes**, both in `ops/README.md`: `uv run rpg-serve` for the built app
+on one origin, or uvicorn + `npm run dev` in two terminals. The Vite proxy is the
+entire CORS story — there is no CORS middleware, deliberately.
 
 ## Important locations
 

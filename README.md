@@ -9,8 +9,10 @@ packages are all hand-editable in-game, so growth is *possible* — but with no
 earned currency, every upgrade is arbitrary. This project supplies the currency
 and the rules that make upgrades feel earned.
 
-> **Phase 0.** Repo, process, and CI harness exist. **No application code yet.**
-> The first work item is Phase 1's `app-shell` — see [ROADMAP.md](ROADMAP.md).
+> **Phase 1, in progress.** The harness is done and the application skeleton now
+> runs: a FastAPI seam, a one-page React SPA that crosses it, and two honest run
+> modes. There is no game logic yet — no ledger, no economy, no careers. Those
+> are items 1.2 onward in [ROADMAP.md](ROADMAP.md).
 
 ## The loop
 
@@ -61,7 +63,9 @@ nba2k-rpg/
 │   └── decisions/       ADRs — nine settled calls and what each cost
 ├── requests/          Work intake — three tracks (feature / bugfix / calibration)
 ├── .claude/skills/    The pipeline stages, plus /commit
-├── src/rpg_core/      Domain core — I/O-free, web-free. Empty until Phase 1
+├── src/rpg_core/      Domain core — I/O-free, web-free. Empty until item 1.2
+├── src/rpg_api/       HTTP seam — routing, serialization, serving the SPA
+├── app/               React + Vite SPA. All of its config is scoped to app/
 ├── research/          IFF extraction toolkit + the roster sample
 ├── ops/               Branch protection, local toolchain setup
 ├── tests/             Structural guards
@@ -69,18 +73,32 @@ nba2k-rpg/
 ```
 
 Directories appear when their phase does. `careers/`, `datasets/`, `rulesets/`,
-`lib/`, and the web app don't exist yet.
+and `lib/` don't exist yet.
 
 ## Setup
 
 ```powershell
-winget install --id=astral-sh.uv -e   # once; open a new shell afterwards for PATH
-uv sync                               # from the tracked uv.lock
-uv run pytest
+winget install --id=astral-sh.uv -e        # once; open a new shell afterwards for PATH
+winget install --id=OpenJS.NodeJS.LTS -e   # once
+uv sync                                    # from the tracked uv.lock
+npm ci                                     # from app/, using the tracked lockfile
 ```
 
-See [ops/README.md](ops/README.md) for branch protection, the full local check
-list, and the lockfile rule.
+Then run it, either way:
+
+```powershell
+npm run build          # from app/
+uv run rpg-serve       # one origin, http://127.0.0.1:8000
+```
+
+```powershell
+# or, for development, in two terminals:
+uv run uvicorn rpg_api.app:create_app --factory --reload --host 127.0.0.1 --port 8000
+npm run dev            # from app/
+```
+
+See [ops/README.md](ops/README.md) for branch protection, both toolchains, the
+full local check list, and the lockfile rules.
 
 ## Status
 

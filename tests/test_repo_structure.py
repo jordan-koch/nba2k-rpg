@@ -174,3 +174,57 @@ def test_core_documents_exist() -> None:
     """The three documents that carry the design, each doing one job."""
     for name in ("GAME_DESIGN.md", "ROADMAP.md", "DESIGN.md", "README.md", "CLAUDE.md"):
         assert (REPO_ROOT / name).is_file(), f"{name} is missing."
+
+
+# ─── Documentation ────────────────────────────────────────────────────────────
+# "The docs describe the application that exists" is otherwise a goal with no
+# pass/fail check at all, which means it rots the first time somebody is in a
+# hurry. These are cheap substring assertions in the same idiom as the rest of
+# this module.
+
+
+def _read(name: str) -> str:
+    return (REPO_ROOT / name).read_text(encoding="utf-8")
+
+
+def test_no_document_still_claims_there_is_no_application() -> None:
+    """Compared LOWERCASED, and that is not incidental.
+
+    README.md capitalized the N in "No application code yet" and CLAUDE.md did
+    not, so a case-sensitive check would silently pass on one of the two while
+    the other kept lying.
+    """
+    stale = "no application code yet"
+
+    for name in ("README.md", "CLAUDE.md"):
+        assert stale not in _read(name).lower(), (
+            f"{name} still says there is no application code, but src/rpg_api/ "
+            "and app/ both exist and run."
+        )
+
+
+def test_claude_md_project_map_lists_both_new_directories() -> None:
+    body = _read("CLAUDE.md")
+
+    for path in ("src/rpg_api/", "app/"):
+        assert path in body, (
+            f"CLAUDE.md's project map does not mention {path}. An agent "
+            "onboarding from it would not know the directory exists."
+        )
+
+
+def test_ops_readme_documents_the_node_toolchain_and_both_run_modes() -> None:
+    body = _read("ops/README.md")
+
+    assert "## Node toolchain" in body, (
+        "ops/README.md needs a Node toolchain section beside the uv one — the "
+        "frontend has its own install step and its own lockfile rule."
+    )
+
+    for command in (
+        "uv run rpg-serve",  # served mode — the one canonical incantation
+        "npm run dev",  # dev mode, second terminal
+        "uv run uvicorn rpg_api.app:create_app",  # dev mode, first terminal
+        "npm ci",  # the install that respects the lockfile
+    ):
+        assert command in body, f"ops/README.md does not document `{command}`."

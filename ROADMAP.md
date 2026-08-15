@@ -153,8 +153,8 @@ practice subsystem `DESIGN.md` rejected.
 **Proves:** the architecture, and whether the loop is any fun.
 **Exit:** two careers, ten box scores each, one correction, a spend, a worksheet
 applied in-game.
-**Status:** **IN-PROGRESS** — 1.1 `app-shell` is planned and decided; implementation
-is next. No application code has landed yet.
+**Status:** **IN-PROGRESS** — 1.1 `app-shell` has landed the application
+skeleton. No domain logic yet; 1.2 `career-ledger` is next.
 
 The economy here is **deliberately fake** — placeholder XP, invented expectation,
 guessed affinity numbers. Finding out whether the loop is satisfying comes before
@@ -162,7 +162,7 @@ calibrating it.
 
 | # | Item | Deliverable | Size | Needs | Status |
 |---|---|---|---|---|---|
-| 1.1 | `app-shell` | FastAPI + React/Vite wiring, dev server, health endpoint, frontend build in CI | M | 0.3 | IN-PROGRESS |
+| 1.1 | `app-shell` | FastAPI + React/Vite wiring, dev server, health endpoint, frontend build in CI | M | 0.3 | DONE |
 | 1.2 | `career-ledger` ★ | Event schema, JSONL append, career directory layout, the fold, replay-determinism test | L | 0.2 | NOT STARTED |
 | 1.3 | `correction-by-append` ★ | Superseding-event model so edits and deletes never mutate history | M | 1.2 | NOT STARTED |
 | 1.4 | `ruleset-loader` | Versioned ruleset config; every event pins the version live at the time | M | 1.2 | NOT STARTED |
