@@ -1,7 +1,9 @@
 # Scoping Panel — Raw Proposals
 
-> Verbatim output of the three divergent scopers. Kept unfiltered as the
-> provenance trail: what was considered, separate from what was kept.
+> Verbatim panel output, with exactly two mechanical transformations: machine-absolute
+> path prefixes stripped (these files are tracked and this repo is public), and markdown
+> link syntax neutralized so repo-relative citations do not read as broken links from
+> this directory. No other content altered.
 
 
 ---

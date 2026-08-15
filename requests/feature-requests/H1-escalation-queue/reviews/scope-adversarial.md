@@ -1,11 +1,12 @@
 # Scoping Panel — Adversarial Findings & Convergence
 
-> Verbatim output of the two adversaries, plus the merge step's convergence
-> map. Kept unfiltered — including findings later judged overstated.
+> Verbatim panel output, with exactly two mechanical transformations: machine-absolute
+> path prefixes stripped (these files are tracked and this repo is public), and markdown
+> link syntax neutralized so repo-relative citations do not read as broken links from
+> this directory. No other content altered.
+
 
 ## Convergence map
-
-*Where two or more scopers independently agreed — the highest-signal material.*
 
 - - **theme:** INERTNESS is the feature-killing risk, and it is the same shape as ops/README.md's 'inert until it is re-applied' failure for branch-protection.json
   - **scopers:** - fit
@@ -58,7 +59,6 @@
 
 Three things break. (1) FRAMING: the request's headline pain is that a worker mid-build has no third move; nothing in core creates that move. The only CLAUDE.md edit lands inside the project-map fence, which announces a file's existence, not a permission to park — so goal 1 is asserted, not delivered, and no acceptance criterion touches it. (2) EVIDENCE: one of the "four verified decisions already stranded in `_done/1.1-app-shell/`" is not a parked decision at all — PROJECT_SCOPE.md:319 sits under the header "**Folded in (all of them — Decision 7)**" at :316; it shipped. And the MEASURED claim that "CLAUDE.md and the FEATURE_REQUEST both claim §8 parks ten questions" is false for CLAUDE.md, whose three "ten" mentions (:57, :90, :111) all refer to ADRs, of which there are ten. In a repo where `measured` is a load-bearing word, a mislabelled claim is the finding. (3) ACCEPTANCE: the criteria are strong in shape — non-vacuity, red-and-green, failure-message-as-record are all genuinely testable — but four are not checkable as written. "The phase names" in an *exact-set* assertion is unenumerated and its normalization undefined; the negative assertion misses ROADMAP.md:41-51, a third table shape whose leading cells are bold surface names rather than empty or `**[OPEN-N]**`; the tmp_path proof fabricates a queue but not a roadmap, so the "green" case is coupled to live ids; and the criteria are not tier-tagged, so two of them assert cheap-fold deliverables the user may drop. The non-goals are mostly honest and the inertness risk is named without flinching — but non-goal 7 (no rationale in entries) is breached by a core deliverable, and the "REGISTER-BOUNDARY GUARD" name overclaims what `no "[OPEN-" in a title` can prove.
 
-
 ### Adversary 2
 
 - **adversary:** scope-completeness
@@ -71,7 +71,6 @@ The problems are in the tiers and in what got left out. (A) OVER-REACH: the acce
 Two internal contradictions block implementation as written: `Source:` is required by AC 8 but absent from the five-field format the core pins (and the "stay at five" rule is the stated mitigation for format churn), and above_and_beyond's core item edits GAME_DESIGN.md §8 while the non-goals and gated decision 5 both declare §8 off limits. I also found one measured doc-drift defect in a file this scope edits that the scope did not notice: CLAUDE.md:216 still says "Nine decisions are settled" while :57, :90, and :111 all say ten and ten exist on disk.
 
 Net: the shape is right, the gating on the wiring question is honest and well-argued, and the recommendation to defer write-side skill wiring is correct. But the acceptance criteria need trimming in two places, three contradictions need resolving before a planner can act, and four completeness gaps need naming.
-
 
 ---
 
@@ -90,7 +89,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Promote one line into CLAUDE.md's "Project conventions" section (not the map fence): "Hit a judgment call mid-build? Record it in ESCALATIONS.md with the assumption you took, and keep going — parking never blocks." This is a doc line, not a change to any skill's decision logic, so it does not breach the request's Explicitly-out. Add a core acceptance criterion asserting that string's presence, in the tests/test_repo_structure.py:276-284 substring idiom. If the user declines the extra CLAUDE.md line (see A1-15 on the budget), restate goal 1 honestly as "make the third move POSSIBLE and recorded — making it KNOWN is gated with the wiring".
 - **adversary:** fit-ac
 
-
 ### F-02
 
 - **id:** A1-02
@@ -102,7 +100,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** I read the cited lines. requests/feature-requests/_done/1.1-app-shell/PROJECT_SCOPE.md:316 is the header "**Folded in (all of them — Decision 7)**", and :318-319 is a bullet under it: "SPA history fallback for unmatched non-`/api` paths, paired with the AC 7 JSON-404 guard. It is what stops item 1.10's router from being a breaking change." That is a decision MADE and SHIPPED, whose forward reference to 1.10 explains why 1.10 will have nothing to decide. The scope records it as "the client-side router seam (:319, moment 1.10)" — a parked decision. Parking it would put a non-question in the queue on day one, which is precisely the "shadow backlog" failure non-goal 6 warns about, and it inflates the evidence base the scope leans on hardest ("four decisions with explicitly named moments", "moves the feature from plausible to proven"). The other three check out: :369 and :370 are `drop`-tier rows carrying explicit future moments ("right moment is 1.8", "the seam it slots into at 1.8"), and IMPLEMENTATION_PLAN.md:859-861 is the `.gitignore:63` `build/` item, verified — .gitignore line 63 is literally `build/`.
 - **proposed_fix:** Drop the :319 item. Restate the recovery as THREE entries (PROJECT_SCOPE.md:369, :370, IMPLEMENTATION_PLAN.md:859-861) and correct the count everywhere it appears. If a fourth is wanted, PROJECT_SCOPE.md:373 ("Three-way version parity test — `app/package.json`'s version is meaningless for a private SPA. Mark it private, fix the version at a placeholder") is a genuine parked call with an unstated moment, and naming its moment would be an honest exercise of the format. Note separately that IMPLEMENTATION_PLAN.md:861 already prescribes its own disposition — "Should become an intake item rather than being rediscovered at 2.1" — so the queue entry should point at that, not replace it.
 - **adversary:** fit-ac
-
 
 ### F-03
 
@@ -116,7 +113,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Restate: "MEASURED — ROADMAP.md:334 cites [OPEN-10]; GAME_DESIGN.md §8 defines [OPEN-1] through [OPEN-9] ([OPEN-1] settled at :292, so eight live); a grep over tracked *.md finds no [OPEN-10] definition. FEATURE_REQUEST.md:52-53 asserts §8 parks ten. CLAUDE.md makes no count." Then note the seed entry should record BOTH the orphan and the stale count in the request, since fixing the request's prose is also not this item's job.
 - **adversary:** fit-ac
 
-
 ### F-04
 
 - **id:** A1-04
@@ -128,7 +124,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The 17 criteria read as one flat contract, but they mix tiers. Criterion 12 requires `test_core_documents_exist` (tests/test_repo_structure.py:243-247) to include ESCALATIONS.md — that is tiered as a cheap_fold and is a live dissent in the scope's own text. Criterion 13 requires tests/test_request_links.py's SCANNED_TREES (:24) extended to root-level `*.md` — also a cheap_fold, and it is the ONLY thing that makes criterion 13's stated purpose ("every relative pointer an entry carries is verified to resolve") true. If the user drops either fold, the acceptance panel in stage 4 has criteria it cannot satisfy and no way to tell they were optional. The panel's contract is exactly "a cold agent can run one command and get a pass or fail" (requests/feature-requests/README.md:65-66) — that requires knowing which commands are in scope.
 - **proposed_fix:** Tag every criterion with the tier that produces it: `[CORE]`, `[FOLD: root-link-check]`, `[FOLD: core-documents]`, `[GATE: read-seam]`. State once, above the list, that FOLD/GATE criteria bind only if the user adopts that item, and that dropping a fold drops its criterion rather than failing it.
 - **adversary:** fit-ac
-
 
 ### F-05
 
@@ -142,7 +137,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Write the set literally in the criterion: the 38 ids as strings, plus exactly `{"Phase 0","Phase 1","Phase 2","Phase 3","Phase 4","post-v1"}`, matched case-insensitively after stripping the em-dash suffix, and add an explicit sub-assertion that `#### Harness — Phase 1` (ROADMAP.md:193) contributes nothing.
 - **adversary:** fit-ac
 
-
 ### F-06
 
 - **id:** A1-06
@@ -154,7 +148,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The criterion proves that exactly two non-item shapes contribute zero ids: rows with an empty leading cell (ROADMAP.md:25-35, :77-84) and rows leading with `**[OPEN-N]**` (:326-334). Both verified. But ROADMAP.md:41-51 is a third shape the criterion does not name: the in-scope application table, whose leading cells are non-empty, non-bracketed bold labels — `| **Career management** | Create, list, view, archive...`, `| **Player state** | ...`, `| **Game log** | ...`. A regex that rejects empty cells and `[OPEN-` but accepts bold leading cells satisfies the criterion as written while admitting "Career management" as a valid moment. The scope's own risk entry lists four shapes and still misses this one (it counts the harness table's sixth column as the fourth). Since the scope calls the negative assertion "non-negotiable" precisely because a loosened regex would widen silently, the omission defeats the purpose.
 - **proposed_fix:** Add to the criterion: "and rows whose leading cell is a bold prose label (the application-surface table at ROADMAP.md:41-51) contribute ZERO ids — assert `parse(ROADMAP.md)` contains none of `Career management`, `Player state`, `Game log`, `Box-score entry`, `Spend flow`, `Badge loadout`, `Progression history`, `Milestone tracker`, `Career comparison`."
 - **adversary:** fit-ac
-
 
 ### F-07
 
@@ -168,7 +161,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Specify the guard as a two-argument pure function — `violations(queue_path: Path, roadmap_path: Path) -> list[...]` — and require both files fabricated under tmp_path in the red and green proofs, with a small fake roadmap table containing `1.3`, `H2`, `### Phase 3 — Season`, and `post-v1`. The real assertion (criterion 5) then calls it with REPO_ROOT paths, which is the only place live ids appear.
 - **adversary:** fit-ac
 
-
 ### F-08
 
 - **id:** A1-08
@@ -180,7 +172,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** Core pins five fields including `Status:` with "a closed vocabulary", AND a `## Resolved` section at the foot that resolved entries move into. Those are two representations of the same fact that can disagree — an entry marked `Status: resolved` sitting under `## Open`, or vice versa. The scope drops the `Surfaced by:` field for exactly this reason: "Two fields that must agree is a pure drift source with no new information." The same argument applies here and is not made. Compounding it, the criterion requires "every `Status:` value is drawn from a closed vocabulary declared in the test" without ever naming the vocabulary, so the criterion cannot be checked without a decision the scope has not taken.
 - **proposed_fix:** Pick one representation. Recommended: sections are the truth (an entry's state is where it lives), and `Status:` is replaced by an optional `Resolved by:` pointer carried only in the `## Resolved` section — which also drops the format to four fields on an open entry, reinforcing the stated five-field ceiling. If both are kept, enumerate the vocabulary literally in the criterion (e.g. exactly `{open, resolved}`) and add a criterion asserting section membership and `Status:` agree for every entry.
 - **adversary:** fit-ac
-
 
 ### F-09
 
@@ -194,7 +185,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Loosen non-goal 7 to what is actually intended: "Entries carry no ADR-length argumentation. One sentence of context is permitted and expected — the assumption's justification, the constraint that makes the question live. The full argument belongs in the ADR, request, or commit the entry points at." Then the serviceability observation fits inside the rule instead of against it. Alternatively leave the observation in ROADMAP.md §v1 where it is already true, and have the entry cite `ROADMAP.md:53-55` — but that leaves ROADMAP.md carrying half the content, which criterion 11 forbids.
 - **adversary:** fit-ac
 
-
 ### F-10
 
 - **id:** A1-10
@@ -206,7 +196,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The summary states "Core is therefore the file plus its boundary header, the format, the guard, and seven seed entries — the three ROADMAP.md:217-222 hypotheses plus four verified decisions already stranded in _done/1.1-app-shell/". But the tiering puts only the three hypotheses in core; the four strays are a cheap_fold and the [OPEN-10] orphan is a separate cheap_fold. So core contains three seeds, not seven, and the full adopted set would be eight, not seven — and per finding A1-02 one of the four strays is not a parked decision, so the true numbers are three in core and seven total. The risks section then leans on "the seven seed entries" as the mitigation for the request's observable signal not firing, attributing to core a mitigation core does not contain. Acceptance criterion 10 proves only the three.
 - **proposed_fix:** State the seed inventory once, as a table with a tier column: three hypotheses [CORE]; two recovered `drop`-row decisions from PROJECT_SCOPE.md:369/:370 [FOLD]; the `.gitignore` item from IMPLEMENTATION_PLAN.md:859-861 [FOLD]; the [OPEN-10] orphan [FOLD]. Fix the summary and the risk mitigation to reference the CORE count, and add a fold-tagged acceptance criterion for each fold's entries.
 - **adversary:** fit-ac
-
 
 ### F-11
 
@@ -220,7 +209,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Split and rename. "[CORE] ID-REUSE GUARD: no entry title contains `[OPEN-` — an entry must not re-badge a GAME_DESIGN.md §8 question under a second id." and "[CORE] BOUNDARY HEADER PRESENT: ESCALATIONS.md contains the strings `GAME_DESIGN.md`, `DESIGN.md`, `Stage plan`, and `diagnose-bug`." State explicitly that the boundary itself is enforced by human reading of the header, not by a test — the scope already believes this and should say it in the criteria rather than only in the risks.
 - **adversary:** fit-ac
 
-
 ### F-12
 
 - **id:** A1-12
@@ -232,7 +220,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** "a test asserts `ROADMAP.md` no longer enumerates the three hypotheses inline — the 'Parked, not scheduled' paragraph is reduced to a pointer line containing `ESCALATIONS.md`." "No longer enumerates" cannot be turned into an assertion without knowing which strings must be absent, and "reduced to a pointer line" cannot be checked without knowing what the pointer line says. This is the criterion the scope calls "the one that stops the migration leaving two sources that drift" — the load-bearing one is the vaguest.
 - **proposed_fix:** Name the strings. "[CORE] a test asserts `ESCALATIONS.md` appears in ROADMAP.md, and that the literals `design/UX specialist` and `autonomous stage dispatcher` (present today at ROADMAP.md:217-218) do NOT. Failure message: 'ROADMAP.md still enumerates a migrated hypothesis — the queue is now the source, and two sources drift.'" Note that `serviceability gate` cannot be asserted absent if the §v1 constraint text at ROADMAP.md:53-55 is retained, so choose the two unambiguous strings.
 - **adversary:** fit-ac
-
 
 ### F-13
 
@@ -246,7 +233,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Split the exactness across two targets. Against a FROZEN fixture copy of a roadmap table under `tests/fixtures/`, assert exact-set equality — that catches parser regressions with zero coupling to the live document. Against the live ROADMAP.md, assert (a) the anchors `1.3`, `H1`, `H2` are present, (b) the three negative shapes contribute zero (A1-06), and (c) `len(ids) >= 38`, so narrowing fails loudly while a new row does not.
 - **adversary:** fit-ac
 
-
 ### F-14
 
 - **id:** A1-14
@@ -258,7 +244,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The scope invokes ROADMAP.md:197's `Blocks: 1.3` as the closing argument against the write-side wiring, against the mirror guard, and in the summary ("every gated item adopted delays the ledger's correction model"). But ROADMAP.md:179-180 shows 1.2 `career-ledger` is NOT STARTED and 1.3 `correction-by-append` Needs 1.2. So H1 is not on the critical path today — 1.2 is, and H1 could take a week without moving 1.3's start date by a day. The scope does concede this once ("there is genuine slack — but slack is not a licence"), then continues to use the binding cell as the primary cost argument. The effect is to pressure the reader toward option (a) with a cost that is currently zero, when the scope's own headline risk says option (a) produces an inert file.
 - **proposed_fix:** Quantify the slack once, plainly, in the risk entry and in gated_decision 1: "H1 gates 1.3 only after 1.2 lands. 1.2 is NOT STARTED (ROADMAP.md:179) and is a substantial item, so the schedule cost of an extra day on H1 is currently zero. The argument against the write-side wiring must stand on its own merits — the write protocol is being designed from imagination — not on the Blocks cell."
 - **adversary:** fit-ac
-
 
 ### F-15
 
@@ -272,7 +257,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Make it absolute and honest: "[CORE] `(Get-Content CLAUDE.md).Count` is at most 222. NOTE: the documented budget (.claude/skills/update-docs/SKILL.md:76) is under 200 lines and the file is already at 221 real lines; the prescribed measuring command reports 181 because `Measure-Object -Line` discounts blank lines. This item accepts +1 knowingly and does not attempt the cut, which belongs with the bugfix request for the measuring command." If finding A1-01's rules line is adopted, this becomes at most 223 and should say so.
 - **adversary:** fit-ac
 
-
 ### F-16
 
 - **id:** A1-16
@@ -284,7 +268,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The request's Explicitly-out says "Not a change to how the pipeline skills behave." The scope routes the make-feature-request/SKILL.md read bullet to the human specifically because "it does edit a skill file, which brushes the request's Explicitly-out" — correct and commendable. But it simultaneously folds, as a cheap_fold requiring no approval, "a one-line disambiguation in ... .claude/skills/diagnose-bug/SKILL.md". That is also an edit to a skill file. The scope's defence ("DISAMBIGUATION ONLY — the functional change of giving the hand-off a destination is gated below") is sound, but it is buried inside the fold's own text rather than stated as the rule that separates the two cases.
 - **proposed_fix:** State the distinction once, in non_goals: "A skill edit that changes what an agent DOES is gated. A skill edit that is purely descriptive prose — a name disambiguation, a cross-reference — is folded. The diagnose-bug line is the second kind; the make-feature-request bullet is the first, because it adds a step to a checklist an agent follows." Then both dispositions are readable from one rule rather than from two separate justifications.
 - **adversary:** fit-ac
-
 
 ### F-17
 
@@ -298,7 +281,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Reword: "...able to answer 'what was parked against this?' from one file with one grep — `Bears on: 1.3`." Optionally add to the boundary header a one-line instruction naming that grep, and sort `## Open` by moment so the scan is also visually grouped.
 - **adversary:** fit-ac
 
-
 ### F-18
 
 - **id:** A1-18
@@ -310,7 +292,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** "`uv run pytest tests/test_escalations.py -q` is green, AND the module carries a docstring in the idiom of tests/test_repo_structure.py:1-9 / tests/test_layering.py:1-17 explaining why the guard exists." The first clause is a command with a pass/fail. The second is a review judgment — "in the idiom of" and "explaining why" have no mechanical check — bundled into the same bullet, so an acceptance panel would mark the whole criterion green on the pytest run alone. requests/feature-requests/README.md:76-79 requires human-only criteria to be marked user-run so the panel does not claim them.
 - **proposed_fix:** Split. "[CORE] `uv run pytest tests/test_escalations.py -q` is green." and "[CORE, mechanical proxy] the module docstring is non-empty and names both `ROADMAP.md` and `ESCALATIONS.md` — asserted by the module's own test." Leave any judgment about idiom quality to the /commit doc gate rather than the acceptance ledger.
 - **adversary:** fit-ac
-
 
 ### F-19
 
@@ -324,7 +305,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Name the three literals in the criterion and require the entries to contain them verbatim: `serviceability gate`, `design/UX specialist`, `autonomous stage dispatcher`. Pair with criterion 11's absence assertion on the same strings in ROADMAP.md so the pair reads as one migration proof.
 - **adversary:** fit-ac
 
-
 ### F-20
 
 - **id:** A1-20
@@ -336,7 +316,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** above_and_beyond calls the recovery of the stranded decisions "the enhancement that moves the feature from plausible to proven", and the [OPEN-10] seed "the cleanest possible demonstration of why H1's test matters". Neither has a criterion. If both folds are adopted, an acceptance panel has nothing to run against them; their entries could be omitted, malformed in a way the field guard tolerates, or cite a `Source:` that does not resolve, and every criterion stays green.
 - **proposed_fix:** Add fold-tagged criteria: "[FOLD: stray-recovery] ESCALATIONS.md contains entries whose `Source:` fields cite `requests/feature-requests/_done/1.1-app-shell/PROJECT_SCOPE.md:369`, `:370`, and `IMPLEMENTATION_PLAN.md:859-861`, and `uv run pytest tests/test_request_links.py -q` proves each resolves." and "[FOLD: open-10] ESCALATIONS.md contains an entry whose title includes `[OPEN-10]`" — noting this last one requires the id-reuse guard (A1-11) to exempt a title that is ABOUT the orphan rather than re-badging a live question, which is a real interaction the scope has not spotted.
 - **adversary:** fit-ac
-
 
 ### F-21
 
@@ -350,7 +329,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Promote the reading to an explicit line in the fit verdict or non_goals: "We read FEATURE_REQUEST.md:98's non-negotiable as binding the IDIOM, not the FILE, on the evidence that three of the repo's four parser guards already live in their own modules. If the user reads it as binding the file, the guard collapses into test_repo_structure.py and the tmp_path proofs go with it." That way the user can overturn it in one read rather than finding it in a parenthesis.
 - **adversary:** fit-ac
 
-
 ### F-22
 
 - **id:** A1-22
@@ -362,7 +340,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The scope proposes moments for the three hypotheses and offers, for the autonomous stage dispatcher, "post-v1 or H2". H2 is `domain-engineer` (ROADMAP.md:198) — a write-capable subagent for `src/`, Needs 1.2, Blocks 1.4. An autonomous stage dispatcher is orchestration of the request pipeline, not domain delegation; attaching it to H2 because H2 is the nearest harness row is exactly the "MIS-FILING UNDER THE NEAREST MOMENT" risk the scope names, committed in the scope's own seed proposal. Leaving it as "or" also hands the implementer an unmade decision inside a core deliverable.
 - **proposed_fix:** Settle it here: `post-v1`, on the grounds that ROADMAP.md's harness convention (:130-137) sequences H rows by Needs/Blocks and no existing row needs a dispatcher, and that `post-v1` is the honest answer when no moment exists. Say so in one line so the entry's author does not re-open it. Same treatment for the other two: state the proposed moment and the one-line argument, and label the whole set INFERRED as the scope already does.
 - **adversary:** fit-ac
-
 
 ### F-23
 
@@ -376,7 +353,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Add one line to the boundary header and one non-goal: "If an entry's moment disappears from ROADMAP.md, an agent MAY re-point it to the successor row or to `post-v1` and note the change in the entry — this is a pointer repair, not a resolution. Resolving the underlying question stays the user's." Then the guard's red state is always clearable by the person hitting it, and the non-blocking property survives contact with roadmap edits.
 - **adversary:** fit-ac
 
-
 ### F-24
 
 - **id:** A1-24
@@ -388,7 +364,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** Phase 0's exit condition is "a green CI run on an empty repo, and every document doing one job" (ROADMAP.md:147), and Phase 0 is DONE on that basis. The scope argues the file's location on discoverability grounds and defers the taste call to the user, but never tests the proposal against that exit condition — which is the repo's own standard for whether a new root document is justified. The answer is probably yes (a queue does exactly one job, and it is a job no existing document does — DESIGN.md §4 at :115 comes closest and has no moments), but the argument is not made where a user weighing gated_decision 6 would read it.
 - **proposed_fix:** One sentence in the fit verdict: "ROADMAP.md:147's Phase 0 exit — 'every document doing one job' — is satisfied rather than strained: the queue does one job no root document does, and the nearest overlap (DESIGN.md §4, open engineering questions, :115) is explicitly out of scope. A sixth root document is added under that standard, not around it."
 - **adversary:** fit-ac
-
 
 ### F-25
 
@@ -402,7 +377,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Reword to the accurate and equally strong claim: "test_repo_structure.py's helpers (`_git_check_ignore` :33, `_read` :256) are I/O shims, not parsers; the module contains no pure parse function proven red-and-green and no tmp_path fixture anywhere. tests/test_layering.py is where that idiom lives."
 - **adversary:** fit-ac
 
-
 ### F-26
 
 - **id:** A2-01
@@ -414,7 +388,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The core bullet pins the format at an id plus five keys and never lists `Source:`. AC 8 then makes `Source:` a REQUIRED field the guard enforces on every entry. A planner cannot build both. Worse, the contradiction poisons two of the scope's own arguments: the stated mitigation for designing a format from retrospective examples is "keep the field set to five so a format revision at entry six is an edit rather than a migration," and the `Supersedes:` field is dropped explicitly because it would be "a sixth field." If `Source:` is required, the format is already six and both arguments are spent. It also breaks the three ROADMAP-hypothesis seeds, which have no source citation to give beyond `ROADMAP.md:217-222`.
 - **proposed_fix:** Decide it once and state it in one place. Recommended: make `Source:` OPTIONAL — required only when the entry is recovered from an existing artifact — and have AC 8 assert the four mandatory keys (`Bears on:`, `Parked:`, `Assumed:`, `Status:`) plus "`Source:` if present, must be a resolvable relative link" (which the extended link checker already gives for free). Then restate the core bullet as "four required keys plus an optional `Source:`" and drop the "five fields, no more" phrasing, replacing the churn mitigation with an honest "four required keys." Re-check the `Supersedes:` drop rationale against whatever number survives.
 - **adversary:** scope-completeness
-
 
 ### F-27
 
@@ -428,7 +401,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Restate the negative assertion in terms of the property that actually separates the shapes: the leading cell must match an ID SHAPE (`^(?:\d+\.\d+|H\d+)$`) after stripping markdown emphasis, not merely be non-empty. Then the criterion becomes: the parser yields zero ids from the three prose tables (`:23-35`, `:41-51`, `:75-84`) and zero from the open-questions table (`:326-334`), asserted by name against each table's line range. Keep the negative assertion — it is the right idea — but ground it on the shape test rather than on emptiness.
 - **adversary:** scope-completeness
 
-
 ### F-28
 
 - **id:** A2-03
@@ -440,7 +412,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** Hardcoding all 38 ids in tests/test_escalations.py couples an escalation-queue guard to every future roadmap edit. ROADMAP.md explicitly plans to grow H rows on demand, and Phase 2-4 rows may split. The next agent adding H3 gets a red test in a PR about something else, with a fix that is pure ceremony — pasting a new id into a test list. The scope's own risk entry ("ROADMAP RENUMBERING TAX … the obvious 'fix' is to weaken the assertion") describes exactly the pressure this criterion maximizes: an assertion that goes red for a legitimate, unrelated reason is the assertion that gets loosened. The stated benefit — failing loudly on a table reformat rather than silently narrowing — is achievable at a fraction of the cost.
 - **proposed_fix:** Replace exact equality with three cheaper assertions that catch the same failure: (1) a small pinned SENTINEL SUBSET must be present — `{"0.1", "1.1", "1.3", "1.11", "H1", "H2", "2.1", "4.6"}` (spans every table shape including the two-digit minor and the harness table's extra `Blocks` column); (2) a LOWER BOUND on count (`>= 38`) so a reformat that narrows the parse fails loudly while a legitimate addition does not; (3) the shape-based negative assertions from A2-02. This keeps every failure mode the exact set was buying and removes the false-red on roadmap growth.
 - **adversary:** scope-completeness
-
 
 ### F-29
 
@@ -454,7 +425,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Pick one and make the summary match. Recommended: keep the three ROADMAP hypotheses in core (they are the request's stated In scope at FEATURE_REQUEST.md:49-50) and leave the four recoveries plus [OPEN-10] as cheap folds. Rewrite the summary sentence to "…the format, the guard, and the three migrated hypotheses, with four recovered strays and the [OPEN-10] orphan folded in cheaply." If instead the panel wants all seven mandatory, move them into tiered_scope.core explicitly and add an acceptance criterion asserting the distinctive strings for all seven, not just the three that AC 10 covers today.
 - **adversary:** scope-completeness
 
-
 ### F-30
 
 - **id:** A2-05
@@ -466,7 +436,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** One core item proposes a reciprocal cross-reference line in GAME_DESIGN.md §8; the non-goals say §8 stays exactly as it is; gated decision 5 uses "it edits GAME_DESIGN.md" as a reason to withhold the mirror guard. A planner reading all three cannot tell whether §8 is touchable. Compounding it, no acceptance criterion covers the reciprocal line, so it would silently not happen and nothing would notice — which is the same class of failure (an unenforced pointer) that the measured [OPEN-10] orphan demonstrates.
 - **proposed_fix:** Resolve in favour of the cross-reference and narrow the non-goal: change non_goals[0] to "NOT a replacement for `[OPEN-N]` — no migration, no restructuring, no change to any `[OPEN-N]` entry's content. One cross-reference line pointing readers at ESCALATIONS.md is in scope." Add a matching acceptance criterion (substring test: GAME_DESIGN.md contains `ESCALATIONS.md`). Restate gate 5's argument on its actual grounds — that disposing the [OPEN-10] orphan means DECIDING a design question that touches ADR 0005 — rather than on "edits GAME_DESIGN.md," which is now permitted.
 - **adversary:** scope-completeness
-
 
 ### F-31
 
@@ -480,7 +449,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Add `DESIGN.md` §3 to the register map as a sixth row, with the distinguishing test stated plainly: §3 holds decisions ALREADY MADE that have not earned an ADR; the queue holds decisions NOT YET MADE. Strengthen AC 9 to assert the header contains all three DESIGN.md section references as distinct strings (`§2`, `§3`, `§4`) rather than the bare filename, so the boundary cannot pass by naming one of three. Update fit_verdict FRICTION 1 to say six registers, since the count is part of the argument for why the header is the deliverable.
 - **adversary:** scope-completeness
 
-
 ### F-32
 
 - **id:** A2-07
@@ -492,7 +460,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The drain fires when a NEW item enters intake and someone reads what was parked against it. Nothing fires when an item COMPLETES. If item 1.3 lands with two of its entries still Open, those entries now name a DONE moment, the read seam will never surface them again (no future request names 1.3), and they sit in the file forever looking live. This is distinct from the INERTNESS risk the scope does name — inertness is "nobody parks anything"; this is "things were parked correctly and still fall off the end." Both candidate remedies were disposed independently (the /commit surface recommended NO as "the second-best read point"; the /update-docs check dropped), and neither disposition mentions this failure — they were both argued only against inertness.
 - **proposed_fix:** Name it as a distinct risk, then dispose it deliberately. Cheapest honest remedy that respects the non-blocking rule: add a `Status:` value of `lapsed` to the closed vocabulary plus one header sentence ("an entry whose moment shipped without an answer is marked `lapsed` and either re-pointed at a later moment or resolved as 'decided by default'"), so the state at least has a name. Do NOT make it a test — a guard asserting "no Open entry names a DONE item" would turn a live queue entry into a red build, which violates the user-settled non-blocking constraint (see A2-08). If the user takes gate 1(b), note in that gate's rationale that the read seam does not close this hole, so gate 1(a) carries this cost too.
 - **adversary:** scope-completeness
-
 
 ### F-33
 
@@ -506,7 +473,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Name the tension explicitly in risks, and mitigate it in the format rather than by weakening the guard: (1) keep the worked example in the header (already a cheap fold) — it is the main defence; (2) make the failure message actionable enough to fix in under a minute (AC 7 already requires naming the entry, the moment, and both candidate causes — keep that); (3) state in the header that a malformed entry is a build failure so the worker knows the shape matters before writing, and that the fix is always a one-line edit, never deleting the entry. Add a non-goal clarifier: "parking never blocks WORK; a malformed entry does block the MERGE, and that is the price of a mechanical pointer."
 - **adversary:** scope-completeness
 
-
 ### F-34
 
 - **id:** A2-09
@@ -518,7 +484,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** Both are pre-existing defects in shared tooling, adjacent to this item, and cheap. One is folded into a harness item that holds a binding `Blocks: 1.3`; the other is pushed out on the grounds that "it is a defect in an existing skill." The distinguishing principle is never stated. The measurement the scope uses to justify folding (all five root docs return `[]` today) proves there is no CLEANUP today — it does not bound the ONGOING cost: after this lands, every future edit to README.md, CLAUDE.md, ROADMAP.md, GAME_DESIGN.md and DESIGN.md is link-gated, including edits made by `/commit`'s doc pass and `/update-docs`, by five documents' worth of surface that H1 has no stake in. That is a permanent widening of a shared guard introduced by a queue feature.
 - **proposed_fix:** Narrow it to what H1 actually needs: add `ESCALATIONS.md` alone to `SCANNED_TREES` (a one-file addition, e.g. an explicit `SCANNED_FILES` tuple alongside the trees), and raise "extend the checker to all root-level `*.md`" as its own follow-up request alongside the `Measure-Object -Line` bugfix. That keeps the queue's dense relative pointers checked — which is the real motivation — applies one consistent standard to both adjacent defects, and leaves the shared guard's blast radius unchanged. If the panel prefers the wide version, state the distinguishing principle ("defects in tests we are already editing get folded; defects in skills do not") so the next item can apply it.
 - **adversary:** scope-completeness
-
 
 ### F-35
 
@@ -532,7 +497,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Fold the one-word fix (`Nine` → `Ten` at CLAUDE.md:216) into this branch — it is a word change, not a line, so it does not touch the budget constraint in AC 17. Note it in gate 4's rationale as a second small cost of approving ADR 0011 (four call-sites to keep in step, none of them tested). Optionally raise a follow-up: the ADR count appears in CLAUDE.md four times and README.md:63 once, all untested — a candidate for a one-line structural assertion in the same idiom as `test_adr_numbers_are_unique_and_contiguous`.
 - **adversary:** scope-completeness
 
-
 ### F-36
 
 - **id:** A2-11
@@ -544,7 +508,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The scope establishes that the real file is 21 lines over a 200-line hard budget and that the instrument reporting compliance is defective — then writes an acceptance criterion permitting the file to grow by one more, and puts that growth in `core`. "Not worsened by more than one line" is the wrong bar for a file already over budget; the honest bars are net-zero or a reduction. This also weakens the case for raising the measurement defect as a separate bugfix request: the scope discovered the budget is being violated and its response was to violate it slightly more.
 - **proposed_fix:** Change AC 17 to NET-ZERO: `(Get-Content CLAUDE.md).Count` must not exceed 221. The project-map fence at CLAUDE.md:51-67 has an easy trade — the fence already carries a comment line per entry, so add `ESCALATIONS.md` and merge or trim one adjacent line. Alternatively drop the CLAUDE.md pointer from core entirely: `README.md`'s project map plus `requests/README.md` already give two discoverable locations, and `requests/README.md` is the only one covered by the link checker today. If CLAUDE.md keeps the pointer, say in the scope that it is being paid for from a budget already overdrawn, so the decision is visible.
 - **adversary:** scope-completeness
-
 
 ### F-37
 
@@ -558,7 +521,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Attach one conditional criterion per gate, marked "applies only if approved." Gate 1(b): a substring test asserting `.claude/skills/make-feature-request/SKILL.md` contains `ESCALATIONS.md` — the same idiom as `test_both_intake_templates_carry_a_stage_plan_section` (tests/test_repo_structure.py:159). Gate 3: the same substring assertion against `.claude/skills/diagnose-bug/SKILL.md`. Gate 4: `test_every_adr_is_listed_in_the_index` and `test_adr_numbers_are_unique_and_contiguous` stay green with 0011 present, plus the ADR count call-sites in CLAUDE.md and README.md updated (see A2-10). Gate 5: the mirror guard is green, i.e. the orphan is disposed first.
 - **adversary:** scope-completeness
 
-
 ### F-38
 
 - **id:** A2-13
@@ -570,7 +532,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** Every substantial change here happens on a feature branch. Two branches that each park an entry both pick the next free `E-NNN`, and git merges two additions to different regions of one markdown file without a conflict. The uniqueness assertion then fails on `main` AFTER both merged, and the repair is renumbering — which breaks any pointer already written to the old id (a resolution pointer, an ADR, a request, a commit message). The ADR set avoids this because it is one file per decision, so git conflicts loudly; a single append-only markdown file with a monotonic counter has the opposite property. Nothing in the risks, non-goals, or format addresses id assignment.
 - **proposed_fix:** Either accept and name it (single-author repo, branches are short-lived, likelihood genuinely low) as a one-line risk with the repair stated — "renumber the later entry and leave a `superseded id` note rather than silently reusing" — or remove the failure mode by construction: date-scoped ids (`E-2026-08-15-a`) never collide, are still stable, still sort, and cost one regex change (`^E-\d{4}-\d{2}-\d{2}-[a-z]$`). The date form also makes `Parked:` partially redundant, which slightly offsets the format-size pressure from A2-01.
 - **adversary:** scope-completeness
-
 
 ### F-39
 
@@ -584,7 +545,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Add one substring criterion in the AC-10 idiom: `ESCALATIONS.md` contains a distinctive fragment of the preserved observation (e.g. `nowhere defined or tested`) and a link or citation to `ROADMAP.md`'s v1 section. One assertion, and it converts the goal from an intention into a check.
 - **adversary:** scope-completeness
 
-
 ### F-40
 
 - **id:** A2-15
@@ -596,7 +556,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The source of truth for a field a human writes by hand would live in a pytest module. A worker reads `ESCALATIONS.md`'s header, writes a status the header does not enumerate (or enumerates loosely), and finds out at CI. Worse, the two can drift in the other direction: the header lists four statuses, the test knows three, and the fourth silently never validates. This is the same class of failure as the register boundary living only in the scope document rather than in the file — a mistake the scope correctly identifies and fixes for the boundary, then reintroduces for the vocabulary.
 - **proposed_fix:** Declare the vocabulary in `ESCALATIONS.md`'s header (a one-line list) and have the test PARSE it from there, or — simpler and in the repo's existing idiom — keep the tuple in the test but add an assertion that every value in it appears verbatim in the header, mirroring `test_the_failure_message_cites_the_architecture_record` (tests/test_layering.py:112). Either way the document a human reads and the check that binds them cannot drift apart.
 - **adversary:** scope-completeness
-
 
 ### F-41
 
@@ -610,7 +569,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Either surface it as a short gated decision — "the request names `tests/test_repo_structure.py`; we read that as the idiom, not the file. Confirm or redirect. Cost of redirecting: the pure-function/`tmp_path` red-green proofs land in a module with no fixtures and no pure functions, which is the one thing that module currently isn't" — or, at minimum, add an explicit line to fit_verdict recording that a stated non-negotiable was reinterpreted, so it is not discovered at acceptance. Given gate 6 already exists for the file's location, a two-line addition there is the cheapest home.
 - **adversary:** scope-completeness
 
-
 ### F-42
 
 - **id:** A2-17
@@ -622,7 +580,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The scope's central goal is that "a worker" hitting a judgment call parks it. But the workers who hit the most judgment calls are panel subagents in stages 2 and 3, and those are launched read-only — they return findings as text, they do not write tracked files. With write-side wiring deferred (gate 2, recommended NO), the pipeline's own gated calls can only reach the queue if the ORCHESTRATING agent transcribes them, and nothing in core, cheap_folds, or the accepted gates asks it to. So the realistic population of parkers in the near term is: the main agent, and the user. That is smaller than the goals imply, and it strengthens the inertness risk in a way the risk entry does not capture.
 - **proposed_fix:** Name the constraint in risks and adjust one expectation: state that in the near term the parker is the main-thread agent or the user, and that panel subagents surface a parkable decision in their RETURN, which the orchestrator transcribes. If gate 1(b) is approved, the natural symmetric addition is one line telling `/scope-feature`'s merge step to transcribe any gated call the user declines to decide — but that is write-side wiring and belongs with gate 2, so note it as the first candidate for the deferred follow-up rather than folding it here.
 - **adversary:** scope-completeness
-
 
 ### F-43
 
@@ -636,7 +593,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Restate the inventory as five shapes and list all three prose tables by line range in the negative assertion: `:23-35`, `:41-51`, `:75-84`, plus `:324-334`. With the id-shape anchor from A2-02 in place, all four fall out for free — but they should be asserted by name, because the point of a negative assertion is that a future loosening fails loudly.
 - **adversary:** scope-completeness
 
-
 ### F-44
 
 - **id:** A2-19
@@ -648,7 +604,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The valid-moment set is supposed to be parsed out of ROADMAP.md, but `post-v1` appears there in two forms: a heading `### Post-v1` (capital P) and lowercase inside open-questions Phase cells that the negative assertion says must contribute zero ids. So either the parser special-cases the literal (in which case it is not derived from the document, and the exact-set criterion is partly a hardcode), or it derives it from the `### Post-v1` heading (in which case casing must be normalised or the red/green fixture in AC 5 fails). The scope's precedent citation points at :328-334, which is precisely the table it also forbids the parser from reading.
 - **proposed_fix:** Specify one source and one normalisation: derive phase-shaped moments from `^###\s+(Phase \d+|Post-v1)` headings and compare case-insensitively, so both `post-v1` and `Post-v1` validate. Restate the precedent citation as ROADMAP.md:277 (the heading) rather than :328-334 (the forbidden table), and adjust AC 5's fixture to exercise both casings.
 - **adversary:** scope-completeness
-
 
 ### F-45
 
@@ -662,7 +617,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** Change to "whose **Proves** line at `ROADMAP.md:248` is literally 'and the app is genuinely serviceable'", and change the tie-break pointer to `requests/feature-requests/README.md:8-12` (or cite `requests/README.md:6-10` as the track table, which is what it is).
 - **adversary:** scope-completeness
 
-
 ### F-46
 
 - **id:** A2-21
@@ -674,7 +628,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** A locally-created, unstaged `ESCALATIONS.md` is invisible to `_tracked_text_files()`. Running `uv run pytest` before `/commit` stages the file would report green while the leak guard has never looked at it. The criterion is true on CI (the branch is pushed, so the file is tracked) but false at the moment a builder would most naturally check it, and the scope states it without that qualifier.
 - **proposed_fix:** Add the qualifier: "…scanned once `ESCALATIONS.md` is staged — `test_no_leaks.py` reads `git ls-files`, so verify AFTER `/commit` stages, or with an explicit `git add -N ESCALATIONS.md` first." One clause, and it removes a false-green window on a public-repo guard.
 - **adversary:** scope-completeness
-
 
 ### F-47
 
@@ -688,7 +641,6 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **proposed_fix:** State an explicit MVP and a cut order. Suggested MVP: `ESCALATIONS.md` with its boundary header and worked example, the four-key format, `tests/test_escalations.py` with the moment guard plus non-vacuity, the three ROADMAP hypotheses migrated with ROADMAP.md reduced to a pointer, and the `requests/README.md` line. Suggested cut order if the branch runs long, in this sequence: the root-wide link-checker extension (A2-09 narrows it anyway), the [OPEN-10] seed entry, the four `_done/` recoveries, the `test_core_documents_exist` extension. Each is independently landable as a two-line follow-up, which is what makes them safe to cut.
 - **adversary:** scope-completeness
 
-
 ### F-48
 
 - **id:** A2-23
@@ -700,4 +652,3 @@ Net: the shape is right, the gating on the wiring question is honest and well-ar
 - **problem:** The contract analysis is correct TODAY — nothing here touches a ledger or a ruleset, verified by filesystem probe. But the queue's first real users will be items 1.2 `career-ledger`, 1.3 `correction-by-append` and 1.4 `ruleset-loader`, and the entries parked against them will be ledger-schema and ruleset-shape decisions. Once ruleset v1 is pinned by a recorded event (ADR 0004 makes a pinned version immutable), an entry answered afterwards cannot be applied by editing v1 — it has to become v2. Nothing in the queue's header or format tells a worker that, and "the queue records decisions that the repo's own rules may make unapplyable by the time they are answered" is a genuinely new interaction.
 - **proposed_fix:** Probably not a v1 build item, but worth one sentence in the header once 1.4 exists: "an entry answered after the thing it bears on has shipped is resolved forward — a new ruleset version, a superseding event, a new ADR — never by editing what was recorded." For now, record it in the scope's risks as a forward-looking note so the first ledger entry does not discover it, and so gate 4's ADR-0011 argument can weigh it (this is the kind of interaction an ADR is actually for).
 - **adversary:** scope-completeness
-

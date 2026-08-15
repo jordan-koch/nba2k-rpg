@@ -1,4 +1,4 @@
-> **Status:** scoped · created 2026-08-15 · decided · next: plan
+> **Status:** planned · created 2026-08-15 · decided · next: implement
 
 # Project Scope — Escalation Queue (Harness H1)
 
