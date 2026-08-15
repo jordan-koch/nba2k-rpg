@@ -1,4 +1,4 @@
-> **Status:** planned · created 2026-08-14 · decided · next: implement
+> **Status:** implemented · created 2026-08-14 · decided · next: —
 
 <!-- Status token is `planned`, per the grammar at requests/feature-requests/README.md:100
      (intake → scoped → planned → implemented). The create-implementation-plan SKILL.md
@@ -40,19 +40,19 @@ strongest failure mode here.
 |---|---|
 | [`PROJECT_SCOPE.md`](PROJECT_SCOPE.md) | **The decided contract — consume it, do not re-open it.** Its Authoring rule first, then the 23 acceptance criteria, the non-goals, the 15 risks, and the 10 decisions. |
 | [`FEATURE_REQUEST.md`](FEATURE_REQUEST.md) | Context only; every Open Question is disposed by the scope. **Its claim that CLAUDE.md's project map lists serving under `app/` is verified FALSE** — grep returns nothing. Don't inherit that reasoning; the real evidence is `.gitignore:68` and `.gitattributes:41`. |
-| [`requests/feature-requests/README.md`](../README.md) | The pipeline contract: line 59–61 defines *testable* (one command, pass or fail), 71–73 the USER-RUN carve-out, 100 the status grammar, 106 the Index row. |
-| [`pyproject.toml`](../../../pyproject.toml) | The file this changes most: 9 empty deps, 11–13 the comment to delete, 15–21 the dev group, 30–31 the hatch `packages` list, 49 DTZ, 50 PTH, 61–65 `[tool.mypy]` (must stay textually unchanged), 73 `pythonpath`. |
-| [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) | Two jobs today: `Lint, types, tests` (19) and `Secret scan` (50). Line 34 `uv sync --locked`, 47 `--cov=rpg_core`, 10–12 `cancel-in-progress`, 22/25 the action majors already pinned. **Lines 3–7 are load-bearing — see the CI-trigger note below.** |
-| [`ops/branch-protection.json`](../../../ops/branch-protection.json) | Line 4, the exact contexts array the new job's **display name** must join. Line 3's `strict: true` is why a path-filtered job would hang PRs forever. |
-| [`ops/README.md`](../../../ops/README.md) | Line 12 the `gh api -X PUT` apply command, 20–24 the rename warning this item generalizes to job *addition*, 32–62 the uv section the Node section sits beside, 64–73 the four-command green gate. |
-| [`tests/test_repo_structure.py`](../../../tests/test_repo_structure.py) | The guard idiom to copy: `_git_check_ignore` (24–34, works on paths that don't exist), the version pin (46–54), `test_scratch_root_is_gitignored` (83–92) as the template, the substring idiom (107–110) AC 17 extends. |
-| [`tests/test_no_leaks.py`](../../../tests/test_no_leaks.py) | A blocking public-repo gate that now scans frontend files. **Its docstring at 12–13 says it reads the git INDEX** — stage before running or the result is a false green. Patterns at 26–29, `ALLOWED` at 32–35, the now-false docstring at 37, `TEXT_SUFFIXES` at 38–55. |
-| [`tests/test_request_links.py`](../../../tests/test_request_links.py) | `FENCED_BLOCK` (26) and `_dead_links` (40–64). Read before writing any artifact. |
-| [`src/rpg_core/__init__.py`](../../../src/rpg_core/__init__.py) | The whole domain core, 16 lines. Lines 3–6 state the dependency direction from the core's side. |
-| [`DESIGN.md`](../../../DESIGN.md) | §3 at line 99; line 106 "Two packages, one repo." The layering guard's failure message cites this by name — Decision 3 chose a guard over an ADR, so **that citation is the record**. |
-| [`.gitignore`](../../../.gitignore) | 66–68 the Node block; 62–63 blanket `dist/` and `build/` matching at **any** depth; 43–44 the careers carve-out; 18 `var/`. |
-| [`.gitattributes`](../../../.gitattributes) | 3 `* text=auto eol=lf`, 7–10 the CRLF exception, 20–25 the ts/tsx/css/html entries, 35 `*.ico binary`, 41 `package-lock.json linguist-generated`. |
-| [`.claude/settings.json`](../../../.claude/settings.json) | Lines 3–12 the `ask` list — `gh api *` at line 8 is why AC 23 step 2 is structurally impossible for an agent. **Lines 32–35 allow `gh pr view/list` and `gh run list/view` unprompted** — the agent can watch its own CI. |
+| [`requests/feature-requests/README.md`](../../README.md) | The pipeline contract: line 59–61 defines *testable* (one command, pass or fail), 71–73 the USER-RUN carve-out, 100 the status grammar, 106 the Index row. |
+| [`pyproject.toml`](../../../../pyproject.toml) | The file this changes most: 9 empty deps, 11–13 the comment to delete, 15–21 the dev group, 30–31 the hatch `packages` list, 49 DTZ, 50 PTH, 61–65 `[tool.mypy]` (must stay textually unchanged), 73 `pythonpath`. |
+| [`.github/workflows/ci.yml`](../../../../.github/workflows/ci.yml) | Two jobs today: `Lint, types, tests` (19) and `Secret scan` (50). Line 34 `uv sync --locked`, 47 `--cov=rpg_core`, 10–12 `cancel-in-progress`, 22/25 the action majors already pinned. **Lines 3–7 are load-bearing — see the CI-trigger note below.** |
+| [`ops/branch-protection.json`](../../../../ops/branch-protection.json) | Line 4, the exact contexts array the new job's **display name** must join. Line 3's `strict: true` is why a path-filtered job would hang PRs forever. |
+| [`ops/README.md`](../../../../ops/README.md) | Line 12 the `gh api -X PUT` apply command, 20–24 the rename warning this item generalizes to job *addition*, 32–62 the uv section the Node section sits beside, 64–73 the four-command green gate. |
+| [`tests/test_repo_structure.py`](../../../../tests/test_repo_structure.py) | The guard idiom to copy: `_git_check_ignore` (24–34, works on paths that don't exist), the version pin (46–54), `test_scratch_root_is_gitignored` (83–92) as the template, the substring idiom (107–110) AC 17 extends. |
+| [`tests/test_no_leaks.py`](../../../../tests/test_no_leaks.py) | A blocking public-repo gate that now scans frontend files. **Its docstring at 12–13 says it reads the git INDEX** — stage before running or the result is a false green. Patterns at 26–29, `ALLOWED` at 32–35, the now-false docstring at 37, `TEXT_SUFFIXES` at 38–55. |
+| [`tests/test_request_links.py`](../../../../tests/test_request_links.py) | `FENCED_BLOCK` (26) and `_dead_links` (40–64). Read before writing any artifact. |
+| [`src/rpg_core/__init__.py`](../../../../src/rpg_core/__init__.py) | The whole domain core, 16 lines. Lines 3–6 state the dependency direction from the core's side. |
+| [`DESIGN.md`](../../../../DESIGN.md) | §3 at line 99; line 106 "Two packages, one repo." The layering guard's failure message cites this by name — Decision 3 chose a guard over an ADR, so **that citation is the record**. |
+| [`.gitignore`](../../../../.gitignore) | 66–68 the Node block; 62–63 blanket `dist/` and `build/` matching at **any** depth; 43–44 the careers carve-out; 18 `var/`. |
+| [`.gitattributes`](../../../../.gitattributes) | 3 `* text=auto eol=lf`, 7–10 the CRLF exception, 20–25 the ts/tsx/css/html entries, 35 `*.ico binary`, 41 `package-lock.json linguist-generated`. |
+| [`.claude/settings.json`](../../../../.claude/settings.json) | Lines 3–12 the `ask` list — `gh api *` at line 8 is why AC 23 step 2 is structurally impossible for an agent. **Lines 32–35 allow `gh pr view/list` and `gh run list/view` unprompted** — the agent can watch its own CI. |
 
 **Verified absent by listing:** `app/`, `src/rpg_api/`, `tests/conftest.py`, `careers/`,
 `datasets/`, `rulesets/`, `lib/`, `.gitleaks.toml`, `.gitleaksignore`. **Measured on this machine
@@ -337,7 +337,7 @@ with no frontend in the repo at all. Suggested subject:
    fastapi doesn't trip it. Guard `ast.ImportFrom` where `node.module is None` (relative import).
    Compare the first dotted segment.
 2. Deny-list: `fastapi`, `starlette`, `uvicorn`, `rpg_api`. **`pydantic` deliberately absent** —
-   [ADR 0002](../../../docs/decisions/0002-manual-ingestion-dto-boundary.md) requires the DTO be
+   [ADR 0002](../../../../docs/decisions/0002-manual-ingestion-dto-boundary.md) requires the DTO be
    constructible with no HTTP and no UI, so that's item 1.2's call. Do not add it "for completeness".
 3. Unit-test the function twice against `tmp_path` (**AC 3, no source mutation**): a fake module
    containing `import fastapi` reports exactly that file; a clean tree reports none. Then the real
@@ -985,5 +985,5 @@ installing gitleaks anyway (Decision B), which closes it by measurement.
 - [`reviews/plan-proposals.md`](reviews/plan-proposals.md) — the three planner lenses, verbatim
 - [`reviews/plan-adversarial.md`](reviews/plan-adversarial.md) — 45 adversary + 18 meta-audit findings
 - [`reviews/scope-proposals.md`](reviews/scope-proposals.md) · [`reviews/scope-adversarial.md`](reviews/scope-adversarial.md) — stage 2's trail
-- [`ROADMAP.md`](../../../ROADMAP.md) · [`DESIGN.md`](../../../DESIGN.md) · [`CLAUDE.md`](../../../CLAUDE.md) · [`ops/README.md`](../../../ops/README.md)
-- [ADR 0002](../../../docs/decisions/0002-manual-ingestion-dto-boundary.md) — why `pydantic` stays out of the deny-list
+- [`ROADMAP.md`](../../../../ROADMAP.md) · [`DESIGN.md`](../../../../DESIGN.md) · [`CLAUDE.md`](../../../../CLAUDE.md) · [`ops/README.md`](../../../../ops/README.md)
+- [ADR 0002](../../../../docs/decisions/0002-manual-ingestion-dto-boundary.md) — why `pydantic` stays out of the deny-list

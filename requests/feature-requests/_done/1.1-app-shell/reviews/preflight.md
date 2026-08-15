@@ -183,5 +183,14 @@ Matches `ops/README.md` lines 12 and 29, so AC 23's `gh api -X PUT` target is co
 - **Phase 4** removes the scaffold's `oxlint`, wires `reactHooks.configs.flat.recommended`, and sets
   `strict` explicitly because the template does not.
 - **No `ALLOWED` entry and no `.gitleaksignore`** are needed for the frontend files.
-- **`actions/setup-node`'s current major stays UNCONFIRMED** — it needs network access to the
-  marketplace and is Decision E's open item, confirmed before the Phase 5 commit.
+- **`actions/setup-node` is v7 — CONFIRMED**, closing Decision E. Checked against the marketplace
+  releases page before the Phase 5 commit (latest release v7.0.0), then **exercised**: the `Web app`
+  job's *Set up Node* step resolved v7 and installed node v24.19.0 on the first green CI run. This
+  was the plan's last claim carrying an `unconfirmed` label; nothing in this item is now unmeasured.
+  Notable because v7 is well ahead of the v4 most examples still show — consistent with this repo
+  already pinning `checkout@v5` and `setup-uv@v6`.
+
+**Also settled after the fact:** GitHub's protection API accepts
+`ops/branch-protection.json` unchanged. The `gh api -X PUT` re-apply returned
+`{Lint, types, tests, Secret scan, Web app}` with `strict: true`, which was belief 6's deliberate
+carve-out and could only ever be tested by running it.

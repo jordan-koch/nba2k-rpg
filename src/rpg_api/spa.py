@@ -19,13 +19,61 @@ request. `check_dir=False` would fix only the first half.
 
 from __future__ import annotations
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, PlainTextResponse
 
 # Named so the 503 body and ops/README.md cannot drift apart.
 BUILD_COMMAND = "npm run build"
+
+# Vite's default output directory for hashed bundles.
+ASSET_PREFIX = "assets/"
+
+
+def resolves_inside(dist: Path, full_path: str) -> Path | None:
+    """The file `full_path` names inside `dist`, or None if there isn't one.
+
+    A **pure function** so the traversal defense can be proven red and green
+    against `tmp_path`, with no HTTP client in the loop. That is not
+    fastidiousness: an HTTP client resolves `..` segments itself before the
+    request is ever sent, so a test that asks a client for `/../secret.txt`
+    exercises nothing here and stays green with this guard deleted. Same idiom
+    as tests/test_layering.py and tests/test_ci_contexts.py.
+
+    Containment is checked BEFORE existence so an escape is refused even when
+    it names a real file — which is exactly the case a test must be able to
+    construct.
+    """
+    candidate = (dist / full_path).resolve()
+
+    if not candidate.is_relative_to(dist.resolve()):
+        return None
+    if not candidate.is_file():
+        return None
+
+    return candidate
+
+
+def looks_like_a_static_asset(full_path: str) -> bool:
+    """Whether a miss on `full_path` should 404 rather than fall back.
+
+    The static-side twin of the `/api` branch below, and it exists for the same
+    reason: a fallback that swallows misses turns a backend answer into a
+    frontend-looking bug. Vite emits content-hashed chunk names, so a rebuild
+    renames everything under `dist/assets/`. A tab holding the previous page
+    then requests a chunk that no longer exists — and without this, it gets
+    `index.html` with a 200 and the module loader dies on "Expected a
+    JavaScript module script but the server responded with a MIME type of
+    text/html", which points at the frontend rather than at the stale tab.
+    That breaks the build-while-serving workflow ops/README.md advertises.
+
+    Client-side routes are extensionless (`/careers/some-guy/season/3`), so the
+    suffix test separates them cleanly. A path segment containing a dot would
+    be misread as an asset, which is why slugs stay kebab-case.
+    """
+    return full_path.startswith(ASSET_PREFIX) or bool(PurePosixPath(full_path).suffix)
+
 
 MISSING_BUILD_MESSAGE = (
     "The web app has not been built yet.\n\n"
@@ -57,13 +105,17 @@ def attach_spa(app: FastAPI, dist: Path) -> None:
         if full_path == "api" or full_path.startswith("api/"):
             raise HTTPException(status_code=404, detail="Not Found")
 
-        # (b) A real build artifact. `.resolve()` then `is_relative_to` keeps a
-        #     traversal like `../../etc/passwd` from escaping the dist root;
-        #     an escape falls through to the history fallback rather than
-        #     erroring, which is the correct answer for a client-side route.
-        candidate = (dist / full_path).resolve()
-        if candidate.is_file() and candidate.is_relative_to(dist.resolve()):
+        # (b) A real build artifact, if the path names one inside the dist.
+        #     Traversal is refused by resolves_inside; an escape falls through
+        #     rather than erroring, which is the right answer for something
+        #     indistinguishable from a client-side route.
+        candidate = resolves_inside(dist, full_path)
+        if candidate is not None:
             return FileResponse(candidate)
+
+        # (b2) A miss that is obviously an asset is a 404, not the shell.
+        if looks_like_a_static_asset(full_path):
+            raise HTTPException(status_code=404, detail="Not Found")
 
         # (c) History fallback: any unmatched path is a client-side route, so
         #     hand back the shell and let the SPA router decide.

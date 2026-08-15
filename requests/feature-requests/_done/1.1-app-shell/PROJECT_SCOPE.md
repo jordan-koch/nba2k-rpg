@@ -1,4 +1,4 @@
-> **Status:** scoped · created 2026-08-14 · decided · next: plan
+> **Status:** implemented · created 2026-08-14 · decided · next: —
 
 # Project Scope — App Shell (Phase 1, item 1.1)
 
@@ -22,20 +22,20 @@
 **`clean`** — unanimous across all three scoper lanes, and verified rather than asserted.
 
 Phase 0 reserved this item's conventions **by name** in five tracked files:
-[`pyproject.toml`](../../../pyproject.toml) lines 9–13 (`dependencies = []` with
+[`pyproject.toml`](../../../../pyproject.toml) lines 9–13 (`dependencies = []` with
 "FastAPI arrives with Phase 1 item 1.1 (app-shell)"),
-[`.github/dependabot.yml`](../../../.github/dependabot.yml) line 30 ("npm arrives with
-Phase 1 item 1.1"), [`.gitignore`](../../../.gitignore) lines 66–68 (`node_modules/`,
-`.vite/`, `app/dist/`), [`.gitattributes`](../../../.gitattributes) line 41
+[`.github/dependabot.yml`](../../../../.github/dependabot.yml) line 30 ("npm arrives with
+Phase 1 item 1.1"), [`.gitignore`](../../../../.gitignore) lines 66–68 (`node_modules/`,
+`.vite/`, `app/dist/`), [`.gitattributes`](../../../../.gitattributes) line 41
 (`package-lock.json linguist-generated`), and
-[`.claude/settings.json`](../../../.claude/settings.json) (allow entries for
+[`.claude/settings.json`](../../../../.claude/settings.json) (allow entries for
 `PowerShell(node *)` / `PowerShell(npm *)`).
 
 The architecture it instantiates is stated, not invented:
-[`DESIGN.md`](../../../DESIGN.md) §3 — "Two packages, one repo. `src/rpg_core/` is the
+[`DESIGN.md`](../../../../DESIGN.md) §3 — "Two packages, one repo. `src/rpg_core/` is the
 I/O-free domain; the API and web app depend on it and it depends on neither" — echoed
 from the other side by
-[`src/rpg_core/__init__.py`](../../../src/rpg_core/__init__.py) lines 3–11.
+[`src/rpg_core/__init__.py`](../../../../src/rpg_core/__init__.py) lines 3–11.
 
 **Contract applicability, verified.** No dataset: `datasets/manifest.json` does not
 exist (it is item 2.1), so the five data contracts are N/A. No ledger or economy:
@@ -44,11 +44,11 @@ history or ADR 0004's pinned rulesets. None of the nine ADRs is contradicted or 
 
 **One correction to the request, verified.** `FEATURE_REQUEST.md`'s Rough Ideas claims
 "CLAUDE.md's project map lists serving under `app/`". **False** — grep for `app/` in
-[`CLAUDE.md`](../../../CLAUDE.md) returns no matches. The real evidence for the `app/`
+[`CLAUDE.md`](../../../../CLAUDE.md) returns no matches. The real evidence for the `app/`
 convention is `.gitignore` line 68 and `.gitattributes` line 41, which is still strong
 enough to honor rather than re-litigate. A plan must not inherit the false reasoning.
 
-**One honest friction, recorded not resolved.** [`ROADMAP.md`](../../../ROADMAP.md)
+**One honest friction, recorded not resolved.** [`ROADMAP.md`](../../../../ROADMAP.md)
 sizes 1.1 as `M` and does **not** mark it ★ — its legend says unmarked items should skip
 straight to a plan or straight to work. The full panel ran anyway. The user has
 explicitly disposed the resulting size question (Decision 7): there is no budget, and
@@ -120,7 +120,7 @@ same posture would leave half the codebase unchecked from its first commit.
   Legibility only.
 - **A shared type contract between API DTOs and the frontend** — OpenAPI codegen, a
   generated client, or hand-mirrored DTO types. Valuable once `BoxScore` exists at item
-  1.8 ([ADR 0002](../../../docs/decisions/0002-manual-ingestion-dto-boundary.md)); today
+  1.8 ([ADR 0002](../../../../docs/decisions/0002-manual-ingestion-dto-boundary.md)); today
   it would generate types for a two-field payload. *(A hand-written `Health` interface in
   a small typed fetch wrapper is NOT this — it is the seam codegen later slots into.)*
 - **Client-side routing and app chrome.** One page; structuring an app before it has
@@ -146,7 +146,7 @@ same posture would leave half the codebase unchecked from its first commit.
 
 ## Acceptance Criteria
 
-Testable per [`requests/feature-requests/README.md`](../README.md): a cold agent runs one
+Testable per [`requests/feature-requests/README.md`](../../README.md): a cold agent runs one
 command and gets a pass or fail. Criteria only a human can prove are marked **USER-RUN**
 so the acceptance panel does not claim them. Every criterion below describes the single
 agreed deliverable — there is no tier-dependent hedging, because Decision 7 lands the
@@ -154,13 +154,13 @@ full scope.
 
 1. `uv sync --locked` exits 0 from a clean checkout, with `fastapi` and `uvicorn` in
    `[project].dependencies` and resolved in the tracked `uv.lock`. This is verbatim what
-   [`ci.yml`](../../../.github/workflows/ci.yml) line 34 runs, and it hard-fails on a
+   [`ci.yml`](../../../../.github/workflows/ci.yml) line 34 runs, and it hard-fails on a
    stale lock.
 2. `uv run pytest -m "not network"` is green, including a test using
    `fastapi.testclient.TestClient` to `GET /api/health` asserting status 200, content-type
    `application/json`, `body["status"] == "ok"`, `body["version"] == rpg_core.__version__`,
    and a boolean `body["spa_built"]`. No live server, no socket.
-   ([`tests/test_repo_structure.py`](../../../tests/test_repo_structure.py) lines 46–54
+   ([`tests/test_repo_structure.py`](../../../../tests/test_repo_structure.py) lines 46–54
    already pins `rpg_core.__version__` to `pyproject.toml`, so the payload inherits it.)
 3. **Layering guard, self-testing — no source mutation.** The guard is a pure function
    taking a directory root and returning violations. It is unit-tested twice against
@@ -169,13 +169,13 @@ full scope.
    One `uv run pytest` proves red-and-green without editing tracked source.
    (`pydantic` is deliberately **not** in the deny-list — see Decisions.)
 4. **CI-jobs guard, set equality.** The test parses
-   [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) with `yaml.safe_load`,
+   [`.github/workflows/ci.yml`](../../../../.github/workflows/ci.yml) with `yaml.safe_load`,
    collects `jobs.*.name`, and asserts that set **equals**
    `required_status_checks.contexts` in
-   [`ops/branch-protection.json`](../../../ops/branch-protection.json). Equality, not
+   [`ops/branch-protection.json`](../../../../ops/branch-protection.json). Equality, not
    containment: containment passes while a typo'd context name ("Web app" vs "Web App")
    makes every PR hang forever on a check that never reports — the failure
-   [`ops/README.md`](../../../ops/README.md) actually warns about. The failure message
+   [`ops/README.md`](../../../../ops/README.md) actually warns about. The failure message
    names which side carries the extra entry. A negative assertion proves the parser is
    structure-aware: a *step*-level name (e.g. "Gitleaks", "Install") does not enter the
    set. **This requires `pyyaml` and `types-PyYAML` in the dev group** (mypy strict needs
@@ -209,7 +209,7 @@ full scope.
 13. `uv run pytest tests/test_no_leaks.py` is green with `app/package.json`,
     `app/package-lock.json`, `app/tsconfig.json`, and `app/vite.config.ts` tracked. A real
     gate: `.json`, `.ts`, `.tsx`, `.js`, `.mjs`, `.css`, `.html` are all in `TEXT_SUFFIXES`
-    ([`tests/test_no_leaks.py`](../../../tests/test_no_leaks.py) lines 38–55), and the
+    ([`tests/test_no_leaks.py`](../../../../tests/test_no_leaks.py) lines 38–55), and the
     file's docstring claim that lockfiles are skipped is **true** of `uv.lock` and **false**
     of `package-lock.json`. If a pattern trips, the fix is a narrowly-justified `ALLOWED`
     entry with a written reason — **never** a weakened regex or a removed suffix.
@@ -456,45 +456,45 @@ Read first, in order:
 - [`FEATURE_REQUEST.md`](FEATURE_REQUEST.md) — the intake and its nine Open Questions. This
   scope settles 1, 2, 4, 6, 8 and all gated ones; **9 is resolved** (node v24.15.0 / npm
   11.12.1 measured on this machine). Note its `CLAUDE.md`/`app/` claim is verified false.
-- [`requests/feature-requests/README.md`](../README.md) — the pipeline contract, the status
+- [`requests/feature-requests/README.md`](../../README.md) — the pipeline contract, the status
   blockquote grammar, the Index row, the definition of *testable*, and the user-run rule.
-- [`pyproject.toml`](../../../pyproject.toml) — line 9 empty `dependencies` and 11–13 the
+- [`pyproject.toml`](../../../../pyproject.toml) — line 9 empty `dependencies` and 11–13 the
   reservation comment; line 31 the hatch `packages` list; 61–65 `[tool.mypy]`; line 49 the
   DTZ rule; line 73 `pythonpath`; 15–21 the dev group.
-- [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) — job display names at
+- [`.github/workflows/ci.yml`](../../../../.github/workflows/ci.yml) — job display names at
   lines 19 and 50; setup-uv caching 24–28; `uv sync --locked` 34; ruff/mypy 36–43;
   `--cov=rpg_core` 47; `concurrency: cancel-in-progress` 9–12.
-- [`ops/branch-protection.json`](../../../ops/branch-protection.json) — line 4, the exact
+- [`ops/branch-protection.json`](../../../../ops/branch-protection.json) — line 4, the exact
   contexts array a third job must join.
-- [`ops/README.md`](../../../ops/README.md) — the `gh api -X PUT` apply and read-back
+- [`ops/README.md`](../../../../ops/README.md) — the `gh api -X PUT` apply and read-back
   commands, the job-rename warning this item generalizes to job *addition*, the uv section
   the Node section sits beside, and the "same four commands CI runs" block.
-- [`tests/test_repo_structure.py`](../../../tests/test_repo_structure.py) — the guard idiom
+- [`tests/test_repo_structure.py`](../../../../tests/test_repo_structure.py) — the guard idiom
   to copy: `_git_check_ignore` (24–34), `test_package_version_matches_pyproject` (46–54)
   which pins the health payload transitively, `test_scratch_root_is_gitignored` (83–92) as
   the template, and the ADR index/contiguity tests (113–133).
-- [`tests/test_no_leaks.py`](../../../tests/test_no_leaks.py) — `TEXT_SUFFIXES` (38–55) now
+- [`tests/test_no_leaks.py`](../../../../tests/test_no_leaks.py) — `TEXT_SUFFIXES` (38–55) now
   covering the frontend, `ALLOWED` (32–35) as the only sanctioned escape hatch, and the
   docstring at line 37 this item makes false.
-- [`tests/test_request_links.py`](../../../tests/test_request_links.py) — read the
+- [`tests/test_request_links.py`](../../../../tests/test_request_links.py) — read the
   Authoring rule at the top of this document against lines 40–64 before writing the plan.
-- [`src/rpg_core/__init__.py`](../../../src/rpg_core/__init__.py) — the whole domain core
+- [`src/rpg_core/__init__.py`](../../../../src/rpg_core/__init__.py) — the whole domain core
   today, and the docstring stating the dependency direction.
-- [`DESIGN.md`](../../../DESIGN.md) §3 — the "Two packages, one repo" note this instantiates.
-- [`.gitignore`](../../../.gitignore) — 66–68 (the Node block), 51–63 (Python, including the
+- [`DESIGN.md`](../../../../DESIGN.md) §3 — the "Two packages, one repo" note this instantiates.
+- [`.gitignore`](../../../../.gitignore) — 66–68 (the Node block), 51–63 (Python, including the
   blanket `build/` at 63), 35–49 (the careers carve-out and its warning).
-- [`.gitattributes`](../../../.gitattributes) — line 3 (`* text=auto eol=lf`), the `*.ps1`
+- [`.gitattributes`](../../../../.gitattributes) — line 3 (`* text=auto eol=lf`), the `*.ps1`
   CRLF exception, the `*.ts`/`*.tsx`/`*.css`/`*.html` entries, `*.ico binary`, and the
   `package-lock.json linguist-generated` line.
-- [`.github/dependabot.yml`](../../../.github/dependabot.yml) — the uv entry (16–28) whose
+- [`.github/dependabot.yml`](../../../../.github/dependabot.yml) — the uv entry (16–28) whose
   posture the npm entry mirrors, and the line-30 placeholder this discharges.
-- [`.claude/settings.json`](../../../.claude/settings.json) — the `ask` list (git
+- [`.claude/settings.json`](../../../../.claude/settings.json) — the `ask` list (git
   commit/push/merge, `gh api *`) determining what stays a user action, and the allow entries
   already covering `node *` / `npm *`.
-- [`ROADMAP.md`](../../../ROADMAP.md) — Phase 1 row 1.1 and the eleven rows downstream.
-- [`CLAUDE.md`](../../../CLAUDE.md) and [`README.md`](../../../README.md) — both project
+- [`ROADMAP.md`](../../../../ROADMAP.md) — Phase 1 row 1.1 and the eleven rows downstream.
+- [`CLAUDE.md`](../../../../CLAUDE.md) and [`README.md`](../../../../README.md) — both project
   maps and both "doesn't exist yet" sentences: the doc-drift surface AC 17 checks.
-- [ADR 0002](../../../docs/decisions/0002-manual-ingestion-dto-boundary.md) — read before
+- [ADR 0002](../../../../docs/decisions/0002-manual-ingestion-dto-boundary.md) — read before
   writing the layering deny-list: it requires the DTO be constructible in tests "with no
   HTTP and no UI", which is why `pydantic` is deliberately **absent** from the deny-list
   (that is item 1.2's call, not this one's).

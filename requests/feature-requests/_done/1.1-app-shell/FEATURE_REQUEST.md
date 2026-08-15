@@ -1,4 +1,4 @@
-> **Status:** scoped · created 2026-08-13 · decided · next: plan
+> **Status:** implemented · created 2026-08-13 · decided · next: —
 
 # Feature Request — App Shell (Phase 1, item 1.1)
 
@@ -6,9 +6,9 @@
 
 There is no application. Phase 0 built the workbench — CI, branch protection, the
 request pipeline, structural tests — and deliberately stopped there:
-[`pyproject.toml`](../../../pyproject.toml) has an empty `dependencies` list with a
+[`pyproject.toml`](../../../../pyproject.toml) has an empty `dependencies` list with a
 comment reserving FastAPI's arrival for this exact item, and
-[`src/rpg_core/__init__.py`](../../../src/rpg_core/__init__.py) contains only a version
+[`src/rpg_core/__init__.py`](../../../../src/rpg_core/__init__.py) contains only a version
 string.
 
 Phase 1's whole purpose is to find out whether the loop is fun before the economy
@@ -52,7 +52,7 @@ health endpoint, frontend build in CI. Beyond that, hunches only — scoping is 
 to propose better:
 
 - The SPA likely lives in a top-level `app/`. Not chosen here, but
-  [`.gitignore`](../../../.gitignore) already carries `node_modules/`, `.vite/`, and
+  [`.gitignore`](../../../../.gitignore) already carries `node_modules/`, `.vite/`, and
   `app/dist/` rules from Phase 0, and `CLAUDE.md`'s project map lists serving under
   `app/` — so that convention was anticipated and should probably be honored rather
   than re-litigated.
@@ -82,7 +82,7 @@ to propose better:
   - Whatever documentation makes the run story discoverable (`ops/README.md` and/or
     `README.md`), since a launch path nobody can find is not a launch path.
   - Dependency declaration done properly: FastAPI added to
-    [`pyproject.toml`](../../../pyproject.toml) with `uv.lock` regenerated, because
+    [`pyproject.toml`](../../../../pyproject.toml) with `uv.lock` regenerated, because
     CI runs `uv sync --locked` and a stale lock is a hard failure.
 
 - **Explicitly out:**
@@ -121,32 +121,32 @@ but choosing conventions the next eleven items inherit.
 
 A cold scoping agent should read, in order:
 
-- [`ROADMAP.md`](../../../ROADMAP.md) — Phase 1 table for the item row, its
+- [`ROADMAP.md`](../../../../ROADMAP.md) — Phase 1 table for the item row, its
   dependencies (0.3, done), and the eleven items that build on this one.
-- [`CLAUDE.md`](../../../CLAUDE.md) — the project map (which directories exist and
+- [`CLAUDE.md`](../../../../CLAUDE.md) — the project map (which directories exist and
   the instruction not to create the others speculatively), the public-repo rules,
   and the stack statement.
-- [`pyproject.toml`](../../../pyproject.toml) — empty `dependencies` (line 9) with
+- [`pyproject.toml`](../../../../pyproject.toml) — empty `dependencies` (line 9) with
   the comment reserving FastAPI for this item; `[tool.mypy] files = ["src", "tests"]`
   (line 65), which will need to cover a new API package; ruff config; the
   `[tool.hatch.build.targets.wheel] packages = ["src/rpg_core"]` line, which a second
   source package changes.
-- [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) — the existing
+- [`.github/workflows/ci.yml`](../../../../.github/workflows/ci.yml) — the existing
   `python` and `secrets` jobs. Note `uv sync --locked` (line 34) and
   `--cov=rpg_core` (line 47); a new job goes alongside these.
-- [`ops/branch-protection.json`](../../../ops/branch-protection.json) — *verified:*
+- [`ops/branch-protection.json`](../../../../ops/branch-protection.json) — *verified:*
   `required_status_checks.contexts` is `["Lint, types, tests", "Secret scan"]`, the
   jobs' **display names**. A new CI job is therefore not a required check until its
   `name:` is added here *and* the config is re-applied to GitHub. Easy to miss, and
   the symptom is a PR that merges green while the frontend job was failing.
-- [`.gitignore`](../../../.gitignore) — the Node/web-app block already present, and
+- [`.gitignore`](../../../../.gitignore) — the Node/web-app block already present, and
   the careers carve-out warning about blanket rules.
-- [`tests/test_repo_structure.py`](../../../tests/test_repo_structure.py) — the
+- [`tests/test_repo_structure.py`](../../../../tests/test_repo_structure.py) — the
   structural-guard idiom this repo uses; a new top-level directory and a new source
   package are the kind of thing that gets a guard here.
-- [`src/rpg_core/__init__.py`](../../../src/rpg_core/__init__.py) — currently the
+- [`src/rpg_core/__init__.py`](../../../../src/rpg_core/__init__.py) — currently the
   whole domain core; establishes that it holds a version and nothing else.
-- [`ops/README.md`](../../../ops/README.md) — where the local toolchain is
+- [`ops/README.md`](../../../../ops/README.md) — where the local toolchain is
   documented; the Node toolchain likely joins it.
 
 **No dataset is involved**, so the five data contracts do not apply here.

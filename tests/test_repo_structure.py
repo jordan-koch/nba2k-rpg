@@ -213,6 +213,42 @@ def test_claude_md_project_map_lists_both_new_directories() -> None:
         )
 
 
+def test_index_stage_cells_match_their_artifact_status_headers() -> None:
+    """The Index and the artifacts must not disagree about what stage an item is at.
+
+    They did once: the Index said `planned` and every artifact header agreed,
+    while ROADMAP.md said `DONE` and the item had in fact shipped. A cold agent
+    reading requests/ would have concluded 1.1 was planned-but-unbuilt.
+
+    Nothing caught it — test_request_links only checks that links resolve, and
+    the Documentation assertions above deliberately do not reach the Index. So
+    this closes the gap in the same read-and-assert idiom.
+    """
+    stage_cell = re.compile(r"^\|\s*\[(?P<slug>[^\]]+)\]\((?P<link>[^)]+)\)\s*\|\s*(?P<stage>\w+)")
+    status_header = re.compile(r"^>\s*\*\*Status:\*\*\s*(?P<stage>\w+)", re.MULTILINE)
+
+    for track in REQUEST_TRACKS:
+        track_dir = REPO_ROOT / "requests" / track
+        for line in (track_dir / "README.md").read_text(encoding="utf-8").splitlines():
+            row = stage_cell.match(line)
+            if not row:
+                continue
+
+            item_dir = track_dir / row["link"]
+            if not item_dir.is_dir():
+                continue
+
+            for artifact in sorted(item_dir.glob("*.md")):
+                header = status_header.search(artifact.read_text(encoding="utf-8"))
+                if not header:
+                    continue
+                assert header["stage"] == row["stage"], (
+                    f"{track}/README.md lists {row['slug']} as '{row['stage']}' but "
+                    f"{artifact.name} declares '{header['stage']}'. The Index and the "
+                    "artifacts must agree — a stale Index makes a shipped item look unbuilt."
+                )
+
+
 def test_ops_readme_documents_the_node_toolchain_and_both_run_modes() -> None:
     body = _read("ops/README.md")
 

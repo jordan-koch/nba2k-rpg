@@ -12,9 +12,10 @@ convention items 1.2-1.11 will copy — a consumer never hardcodes a location, i
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 
 from rpg_api import health
 from rpg_api.spa import attach_spa
@@ -36,8 +37,20 @@ def default_spa_dist() -> Path:
     return Path(__file__).resolve().parents[2] / "app" / "dist"
 
 
-def create_app(spa_dist: Path | None = None) -> FastAPI:
-    """Build the application. Constructing it must never touch the filesystem."""
+def create_app(
+    spa_dist: Path | None = None,
+    routers: Sequence[APIRouter] = (),
+) -> FastAPI:
+    """Build the application. Constructing it must never touch the filesystem.
+
+    **Pass new API routers in through `routers` — do not call
+    `app.include_router()` on the returned app.** FastAPI matches routes in
+    registration order and the SPA catch-all is registered last, so a router
+    added afterwards is shadowed by it: every one of its paths answers 404 with
+    no indication why, on a route the author can read in the source. Items
+    1.2-1.11 add endpoints, so this parameter exists to make the correct order
+    the only order the signature offers, rather than a comment asking for it.
+    """
     app = FastAPI(title="nba2k-rpg", version=__version__)
 
     # Read per request by both the health payload and the catch-all route.
@@ -45,9 +58,10 @@ def create_app(spa_dist: Path | None = None) -> FastAPI:
     app.state.spa_dist = dist
 
     app.include_router(health.router, prefix="/api")
+    for router in routers:
+        app.include_router(router, prefix="/api")
 
-    # LAST, always. FastAPI matches in registration order, so the catch-all
-    # must come after every real route or it shadows them — see spa.py.
+    # LAST, always — after every real route, or it shadows them. See spa.py.
     attach_spa(app, dist)
 
     return app

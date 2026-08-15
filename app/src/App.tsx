@@ -51,8 +51,18 @@ export default function App() {
           <dt>Version</dt>
           <dd>{status.health.version}</dd>
 
-          <dt>Web build</dt>
-          <dd>{status.health.spa_built ? "served from dist" : "dev server"}</dd>
+          {/* Render the FACT the payload carries, not a mode inferred from
+              it. `spa_built` reports whether app/dist/index.html exists on
+              disk — nothing about which process answered this request. In dev
+              the two diverge: Vite serves the page while the proxied backend
+              still sees a build present, so "served from dist" was simply
+              false there. The mode is known client-side, so it is read from
+              there instead and both rows are true in both modes. */}
+          <dt>SPA build</dt>
+          <dd>{status.health.spa_built ? "built" : "not built"}</dd>
+
+          <dt>Serving</dt>
+          <dd>{import.meta.env.DEV ? "Vite dev server" : "uvicorn"}</dd>
         </dl>
       )}
 

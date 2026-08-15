@@ -30,6 +30,13 @@ describe("App", () => {
     render(<App />);
 
     expect(await screen.findByText("9.9.9")).toBeInTheDocument();
+
+    // Asserted HERE rather than in a third test, so AC 12's exact count of two
+    // survives. `spa_built: false` must render as the fact it is — the page
+    // must not restate it as a claim about which server is answering, which it
+    // cannot know from this payload and got wrong in dev.
+    expect(screen.getByText("not built")).toBeInTheDocument();
+    expect(screen.getByText("Serving")).toBeInTheDocument();
   });
 
   it("renders the unreachable panel naming the start command when the fetch rejects", async () => {

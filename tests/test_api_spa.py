@@ -8,9 +8,11 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
+from fastapi import APIRouter
 from fastapi.testclient import TestClient
 
 from rpg_api import create_app
+from rpg_api.spa import resolves_inside
 
 # ─── AC 5 — the missing-build branch (the fresh-clone state) ──────────────────
 
@@ -113,12 +115,116 @@ def test_the_catch_all_did_not_shadow_the_health_route(
 # ─── Traversal (implementation note, not an acceptance criterion) ─────────────
 
 
-def test_traversal_outside_the_dist_is_not_served(
-    client_factory: Callable[[Path], TestClient], built_spa_dist: Path, tmp_path: Path
+def test_resolves_inside_refuses_an_escape_that_names_a_real_file(
+    built_spa_dist: Path, tmp_path: Path
 ) -> None:
+    """The guard proven RED-able, against a file that really exists.
+
+    Asserted on the pure function, not over HTTP, and that is the whole point:
+    an HTTP client resolves `..` segments client-side before sending, so
+    `client.get("/../secret.txt")` arrives as `/secret.txt` and never reaches
+    the containment check at all. The previous version of this test passed
+    with the guard deleted.
+    """
     secret = tmp_path / "secret.txt"
     secret.write_text("do not serve me", encoding="utf-8")
+    assert secret.is_file(), "the escape must name a real file or this proves nothing"
 
-    response = client_factory(built_spa_dist).get("/../secret.txt")
+    assert resolves_inside(built_spa_dist, "../secret.txt") is None
+
+
+def test_resolves_inside_returns_a_real_asset(built_spa_dist: Path) -> None:
+    resolved = resolves_inside(built_spa_dist, "assets/index-abc123.js")
+
+    assert resolved is not None
+    assert resolved.name == "index-abc123.js"
+
+
+def test_resolves_inside_returns_none_for_a_path_that_is_not_there(
+    built_spa_dist: Path,
+) -> None:
+    assert resolves_inside(built_spa_dist, "assets/never-built.js") is None
+
+
+def test_traversal_over_http_is_not_served(
+    client_factory: Callable[[Path], TestClient], built_spa_dist: Path, tmp_path: Path
+) -> None:
+    """The HTTP half, using the ENCODED form so it survives normalization.
+
+    `/../secret.txt` is collapsed to `/secret.txt` by the client; `/%2e%2e/`
+    reaches the handler intact. Do not "tidy" this back to a plain `../` — it
+    silently disarms the test.
+    """
+    (tmp_path / "secret.txt").write_text("do not serve me", encoding="utf-8")
+
+    response = client_factory(built_spa_dist).get("/%2e%2e/secret.txt")
 
     assert "do not serve me" not in response.text
+    # Positive assertion too, because the negative alone also passes on a 500
+    # or an empty body. 404 rather than the shell: the escape names a path with
+    # an extension, so the static-asset guard refuses it outright instead of
+    # treating it as a client-side route.
+    assert response.status_code == 404
+    assert response.content != (built_spa_dist / "index.html").read_bytes()
+
+
+# ─── Missing assets 404 rather than falling back ─────────────────────────────
+
+
+def test_a_missing_asset_is_404_but_a_client_route_still_falls_back(
+    client_factory: Callable[[Path], TestClient], built_spa_dist: Path
+) -> None:
+    """The pairing IS the test — a 404 alone would not show the distinction.
+
+    A rebuild renames every hashed chunk, so a stale tab requests one that no
+    longer exists. Answering that with index.html and a 200 kills the module
+    loader with a MIME-type error pointing at the frontend.
+    """
+    client = client_factory(built_spa_dist)
+
+    missing_asset = client.get("/assets/index-GONE.js")
+    assert missing_asset.status_code == 404
+    assert missing_asset.content != (built_spa_dist / "index.html").read_bytes()
+
+    client_route = client.get("/careers/some-guy/season/3")
+    assert client_route.status_code == 200
+    assert client_route.content == (built_spa_dist / "index.html").read_bytes()
+
+
+def test_a_missing_file_with_an_extension_is_404(
+    client_factory: Callable[[Path], TestClient], built_spa_dist: Path
+) -> None:
+    assert client_factory(built_spa_dist).get("/favicon.svg").status_code == 404
+
+
+# ─── Registration order is structural, not a comment ─────────────────────────
+
+
+def test_routers_passed_to_the_factory_are_reachable(tmp_path: Path) -> None:
+    """The trap items 1.2-1.11 would otherwise inherit.
+
+    Calling `app.include_router(...)` on the returned app registers it AFTER
+    the catch-all, so every one of its paths 404s. Passing routers in through
+    the factory is what makes the correct order the only order available.
+    """
+    later = APIRouter()
+
+    @later.get("/careers")
+    async def list_careers() -> dict[str, list[str]]:
+        return {"careers": []}
+
+    client = TestClient(create_app(spa_dist=tmp_path / "absent", routers=[later]))
+
+    response = client.get("/api/careers")
+
+    assert response.status_code == 200, (
+        "A router passed to create_app must be registered before the SPA "
+        "catch-all. If this 404s, the catch-all is shadowing it."
+    )
+    assert response.json() == {"careers": []}
+
+
+def test_the_catch_all_is_always_the_last_route(tmp_path: Path) -> None:
+    app = create_app(spa_dist=tmp_path / "absent", routers=[APIRouter()])
+
+    assert getattr(app.routes[-1], "path", None) == "/{full_path:path}"

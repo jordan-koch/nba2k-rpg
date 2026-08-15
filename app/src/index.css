@@ -1,6 +1,11 @@
-/* One page, so one stylesheet. Deliberately no CSS framework and no design
-   system — item 1.1 is a seam, and the surfaces that need real styling arrive
-   at 1.7-1.11. */
+/* One page, so one stylesheet. No CSS framework and no component library.
+
+   HONEST NOTE, because the scope's non-goal reads "no design tokens": the
+   custom properties below ARE tokens, narrowly. They exist so the page is
+   legible in both light and dark, which is a localhost tool the author stares
+   at — not the beginning of a theme system. Recorded as a deliberate widening
+   in the item's IMPLEMENTATION_REPORT rather than left as an unlisted file
+   quietly contradicting its own comment. Real design work is item 1.7+. */
 
 :root {
   --bg: #14161a;
