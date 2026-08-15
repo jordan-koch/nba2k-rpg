@@ -1,4 +1,4 @@
-> **Status:** intake · created 2026-08-15 · open · next: scope
+> **Status:** scoped · created 2026-08-15 · decided · next: plan
 
 # Feature Request — Escalation Queue (Harness H1)
 
