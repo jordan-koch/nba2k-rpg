@@ -54,7 +54,7 @@ ROADMAP.md          v1 boundary, five phases, 36 work items
 DESIGN.md           Open engineering work — unsettled mechanism math only
 docs/
   data-access.md      What can be read, from where, with epistemic labels
-  decisions/          ADRs — nine settled calls
+  decisions/          ADRs — ten settled calls
 requests/           Intake — feature-requests / bugfix-requests / calibration-findings
 .claude/skills/     Pipeline stages + /commit
 src/rpg_core/       Domain core — I/O-free, web-free. Empty until item 1.2
@@ -79,16 +79,17 @@ entire CORS story — there is no CORS middleware, deliberately.
   the failure modes. Every proposed mechanic gets tested against the pillars.
   `[OPEN-N]` items are parked deliberately; each has a phase that answers it.
 - **[ROADMAP.md](ROADMAP.md)** — the work breakdown. **Every row is one intake
-  item and one feature branch.** ★ marks the nine that earn the full scoping panel.
+  item and one feature branch.** It does **not** say how much ceremony a row gets;
+  that is decided against the written request, never in advance (ADR 0010).
   Each row and phase header carries a **Status** — `NOT STARTED` / `IN-PROGRESS` /
   `DONE` — maintained by `/commit` against the diff, not edited ad hoc.
   **`H` rows are harness work** — outside the numbered items, same Status rules,
   ordered by `Needs`/`Blocks` rather than position. A `Blocks` cell is binding:
   it names the item that may not start until the harness row lands.
 - **[docs/decisions/](docs/decisions/)** — read before proposing anything
-  substantive. Nine ADRs cover save decryption, ingestion, the ledger, rulesets,
-  the training subsystem, draft tiers, repo scope, cost-side-only builds, and
-  regression.
+  substantive. Ten ADRs cover save decryption, ingestion, the ledger, rulesets,
+  the training subsystem, draft tiers, repo scope, cost-side-only builds,
+  regression, and when the pipeline's panels run.
 - **[docs/data-access.md](docs/data-access.md)** — everything about the game's
   files. **Every external source in §3 is `unconfirmed`** — nothing has been
   pulled from this repo yet.
@@ -107,7 +108,7 @@ Verified 2026-08-12. Full detail in [`docs/data-access.md`](docs/data-access.md)
 
 ## Decisions already made — do not re-propose
 
-All nine are ADRs. The ones most often re-proposed:
+All ten are ADRs. The ones most often re-proposed:
 
 - **No save decryption** (0001). Reading is not a lesser ask than writing — both
   need the key from behind anti-cheat.
@@ -120,6 +121,9 @@ All nine are ADRs. The ones most often re-proposed:
 - **The build prices upgrades; it never scores production** (0008). Archetype
   must not enter the scoring model, including sympathetic versions.
 - **No athletic regression** (0009). Rejected, not deferred.
+- **The panel is the default** (0010). Ceremony is never pre-registered on
+  unwritten work. Skipping a stage costs a written argument in the request, and
+  three hard triggers foreclose it outright.
 
 ## Project conventions
 
@@ -156,7 +160,12 @@ All nine are ADRs. The ones most often re-proposed:
   game's file formats and a league's statistics; an unconfirmed claim is a task,
   not a fact.
 - **Every roadmap item is a request.** Nothing substantial gets built without an
-  intake artifact behind it. Skip stages when the work is small.
+  intake artifact behind it. **The full pipeline is the default** — a skipped
+  stage is an exception you argue for in writing, in the request's **Stage plan**
+  section, and three hard triggers foreclose the argument entirely
+  ([ADR 0010](docs/decisions/0010-panels-by-default.md), rubric in
+  [requests/README.md](requests/README.md)). The burden of proof is on the cheap
+  path, not on the panel.
 
 ## The one inverted convention
 

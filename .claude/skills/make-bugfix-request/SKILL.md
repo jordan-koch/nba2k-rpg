@@ -104,6 +104,28 @@ Create `requests/bugfix-requests/<slug>/` and write **only** `BUGFIX_REQUEST.md`
 artifacts belong downstream) using the template below. **Carry the load-bearing sections:** **Symptom**,
 **Reproduction attempt**, **Expected vs Actual**, **Severity**, **Triage**, **Affected Area & Pointers**.
 
+**Then decide the Stage plan — written last, never optional.** Per
+[ADR 0010](../../../docs/decisions/0010-panels-by-default.md) the full pipeline is the **default** and a
+skip is argued for. On this track the Stage plan governs **stage 3** (the plan panel): stage 2 has its
+own obviousness funnel, and stage 4 always runs. The three hard triggers in
+[`requests/README.md`](../../../requests/README.md) map to a defect like this — any one fires and the
+plan panel runs, no argument available:
+
+1. **Open Questions for Diagnosis came out non-empty.**
+2. **The reproduction isn't reliable.** A fix you can't trigger on demand has unknown edges — this is
+   the bugfix analogue of an unfillable *Explicitly out*, and it also means the red-to-green evidence
+   the track's definition of done requires can't be produced.
+3. **It touches something expensive to reverse** — a settled ADR, a pillar, the event schema, a dataset
+   contract, or anything another roadmap item pins. **A defect in the fold or an event schema always
+   fires this one**: the ledger has no upstream, so a wrong fix is unrecoverable rather than merely
+   costly (see the track README's note on ledger bugs).
+
+Clear all three and you may *propose* skipping stage 3, saying which triggers cleared and why the fix
+is bounded. The user disposes it at the Step 5 handoff.
+
+> **Note the incentive, and don't take it.** Triggers 1 and 2 are sections *you* just wrote. Write the
+> Open Questions and the Reproduction attempt as if the Stage plan didn't exist — then read them.
+
 ```markdown
 > **Status:** intake · created <YYYY-MM-DD> · open · next: root-cause
 
@@ -141,6 +163,15 @@ first. A best guess is fine — RCA confirms it.>
 ## Open Questions for Diagnosis
 <What's unsure — is it a regression (what changed?), input-dependent, intermittent? Naming the unknown
 beats a false certainty.>
+
+## Stage plan
+<REQUIRED, and written last. Which stages run. Default is all of them; this section governs stage 3.
+
+If the plan panel runs, one line naming the trigger is enough:
+  "Full pipeline. Trigger 3: the defect is in the fold — the ledger has no upstream."
+
+If proposing to skip stage 3, argue it: all three triggers, how each cleared, and what bounds the
+fix. Stage 4 still runs in direct-build mode, with the ROOT_CAUSE_ANALYSIS standing in for the plan.>
 ```
 
 ## Step 5 — Confirm, record, hand off
@@ -153,7 +184,9 @@ beats a false certainty.>
    `| [<slug>](<slug>/) | intake | <one-line note> |`. The status blockquote in the report is the source
    of truth for stage; the Index cell mirrors it.
 3. Point at the next step: *"Run `/diagnose-bug` when you're ready to find the root cause."* Don't start
-   diagnosing yourself — that's a separate, human-gated stage.
+   diagnosing yourself — that's a separate, human-gated stage. **If your Stage plan proposed skipping
+   stage 3, say so explicitly and show the argument** — an exception the user has to infer from a
+   missing artifact isn't surfaced.
 
 Per project convention, **agents commit only through `/commit`.** Suggest it when they want the report
 landed.

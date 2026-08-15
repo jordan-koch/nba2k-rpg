@@ -21,9 +21,15 @@ implement X"* — without turning a one-hour change into a week of process.
 | 4 | **Implement** | `/implement-plan` | code + `IMPLEMENTATION_REPORT.md` | Panel: core reviewers + auto-scaled specialists → execution-based verify → meta-audit. Proves every acceptance criterion by running it. |
 
 Each stage produces one artifact and is **human-gated** — you review and edit
-before invoking the next. A tiny change might only need a request; a
-well-understood one might jump straight to a plan.
-[`ROADMAP.md`](../../ROADMAP.md) marks the items that earn the full panel with ★.
+before invoking the next.
+
+**All four stages run by default.** Stages 2 and 3 are skippable only by an
+argument written into the request's closing **Stage plan** section and cleared
+against the three hard triggers in
+[`../README.md`](../README.md#weight--the-panel-is-the-default) — see
+[ADR 0010](../../docs/decisions/0010-panels-by-default.md). Stage 4 still runs
+either way: with no plan to consume it enters **direct-build mode**, taking this
+request as the statement of intent.
 
 ## Roadmap items are pre-scoped requests
 
@@ -98,6 +104,10 @@ Every artifact opens with a status blockquote:
 > **Status:** &lt;stage&gt; · created &lt;YYYY-MM-DD&gt; · &lt;open | decided&gt; · next: &lt;stage or "implement"&gt;
 
 **Status grammar:** `intake` → `scoped` → `planned` → `implemented`
+
+A skipped stage skips its status: an argued direct build goes `intake` →
+`implemented`, and the absent `PROJECT_SCOPE.md` / `IMPLEMENTATION_PLAN.md` are
+the record that it did. The **Stage plan** section carries the argument.
 
 ## Index
 

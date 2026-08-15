@@ -49,3 +49,4 @@ consequences section should be uncomfortable to write.
 | [0007](0007-repo-location-no-upstream.md) | Repo outside OneDrive; this project has no upstream repo | accepted |
 | [0008](0008-build-is-cost-side-only.md) | The build prices upgrades; it never scores production | accepted |
 | [0009](0009-no-athletic-regression.md) | Do not model athletic regression | accepted |
+| [0010](0010-panels-by-default.md) | Panels are the default; skipping them is an argued exception | accepted |

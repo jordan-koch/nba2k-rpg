@@ -23,6 +23,15 @@ shouldn't, a skill that misfires.
 Stages 3–4 are the feature track's back half, reused. They auto-detect the track
 from the artifact's path.
 
+**All four stages run by default** — [ADR 0010](../../docs/decisions/0010-panels-by-default.md).
+Stage 3 is skippable only by an argument written into this request's closing
+**Stage plan** section and cleared against the three hard triggers in
+[`../README.md`](../README.md#weight--the-panel-is-the-default). Stage 2 has its
+own funnel already: `/diagnose-bug` sizes its own ceremony against how murky the
+cause turns out to be, which is the same principle applied at the moment the
+evidence exists. Stage 4 always runs — with no plan to consume it enters
+**direct-build mode**, taking the `ROOT_CAUSE_ANALYSIS.md` as intent.
+
 ## Definition of done
 
 **A red reproduction goes green, and a regression test is left behind.**
@@ -75,6 +84,9 @@ bugfix-requests/
 ```
 
 **Status grammar:** `intake` → `diagnosed` → `planned` → `fixed`
+
+A skipped stage skips its status, and the absent artifact is the record that it
+did. The **Stage plan** section carries the argument.
 
 Same active-vs-done convention as the feature track: one move into `_done/` at
 the terminal stage, Index row stays with its link updated.

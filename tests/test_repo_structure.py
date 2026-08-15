@@ -20,6 +20,15 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 REQUEST_TRACKS = ("feature-requests", "bugfix-requests", "calibration-findings")
 ADR_FILENAME = re.compile(r"^(\d{4})-[a-z0-9-]+\.md$")
 
+# The two tracks that run the scope/plan panels, and so owe ADR 0010 a stage call.
+# calibration-findings is deliberately absent: it has its own triage and owes a replay
+# plan rather than a panel decision — see requests/calibration-findings/README.md.
+INTAKE_ARTIFACTS = {
+    "feature-requests": "FEATURE_REQUEST.md",
+    "bugfix-requests": "BUGFIX_REQUEST.md",
+}
+STAGE_PLAN_HEADING = re.compile(r"^##\s+Stage plan\s*$", re.MULTILINE | re.IGNORECASE)
+
 
 def _git_check_ignore(relative_path: str) -> bool:
     """True if git would ignore `relative_path`. Works on paths that don't exist."""
@@ -145,6 +154,67 @@ def test_request_tracks_readme_links_every_track() -> None:
     body = (REPO_ROOT / "requests" / "README.md").read_text(encoding="utf-8")
     unlinked = [track for track in REQUEST_TRACKS if f"{track}/" not in body]
     assert not unlinked, f"requests/README.md does not link track(s): {unlinked}"
+
+
+def test_both_intake_templates_carry_a_stage_plan_section() -> None:
+    """ADR 0010's rule is only real if the artifact it lives in has a slot for it.
+
+    The panel decision is made at intake and recorded in the request. If a template loses
+    its `## Stage plan` section, the next request silently ships without an argued stage
+    call, and the default-to-panel rule degrades to whatever the agent felt like — which is
+    exactly the state ADR 0010 replaced.
+
+    This one bites immediately, unlike its sibling below.
+    """
+    missing = [
+        str(path.relative_to(REPO_ROOT))
+        for path in (
+            REPO_ROOT / ".claude" / "skills" / "make-feature-request" / "SKILL.md",
+            REPO_ROOT / ".claude" / "skills" / "make-bugfix-request" / "SKILL.md",
+        )
+        if not STAGE_PLAN_HEADING.search(path.read_text(encoding="utf-8"))
+    ]
+
+    assert not missing, (
+        f"Intake skill template(s) with no '## Stage plan' section: {missing}. "
+        "ADR 0010 requires every request to argue which pipeline stages run; the template "
+        "is where that section comes from."
+    )
+
+
+def test_every_live_intake_artifact_declares_a_stage_plan() -> None:
+    """Every request in flight must say which stages it runs, and why.
+
+    Per ADR 0010 the full pipeline is the default and a skip is an exception argued in
+    writing. A request with no Stage plan section has made that call by omission, which is
+    the failure the ADR exists to prevent — and the omission is invisible, because a skipped
+    stage looks exactly like a stage that hasn't happened yet.
+
+    Archived (`_done/`) artifacts are exempt on the same reasoning that exempts them from
+    the link checker: they describe the repo as it was, and 1.1 shipped before this rule.
+
+    Vacuous while nothing is in flight. It starts biting the moment a request is opened,
+    which is the point — the guard has to predate the first artifact it governs.
+    """
+    live = [
+        path
+        for track, filename in INTAKE_ARTIFACTS.items()
+        if (REPO_ROOT / "requests" / track).is_dir()
+        for path in (REPO_ROOT / "requests" / track).rglob(filename)
+        if "_done" not in path.parts
+    ]
+
+    missing = [
+        str(path.relative_to(REPO_ROOT))
+        for path in sorted(live)
+        if not STAGE_PLAN_HEADING.search(path.read_text(encoding="utf-8"))
+    ]
+
+    assert not missing, (
+        f"Live intake artifact(s) with no '## Stage plan' section: {missing}. "
+        "ADR 0010: the full pipeline is the default, and skipping a stage is an exception "
+        "argued in the request. State the stages even when the answer is 'all of them'."
+    )
 
 
 def test_every_adr_is_listed_in_the_index() -> None:

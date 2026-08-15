@@ -54,17 +54,43 @@ And one that matters more here than in a typical repo:
   statistics — a request that says "2K ratings history is available by season"
   when nobody has checked is a liability. Say `unconfirmed` and it becomes a task.
 
-## Weight
+## Weight — the panel is the default
 
-Not every change needs every stage. A one-line fix does not need a scoping panel.
+Not every change needs every stage. But **which changes don't is decided here,
+against a written request — never in advance.**
+[ADR 0010](../docs/decisions/0010-panels-by-default.md) settles this: the roadmap
+used to pre-register ceremony with a ★ and a size estimate, both guessed before
+the work existed. They're gone.
 
-> Skip stages when the work is small; lean on the full pipeline when the work is
-> big, risky, or hard to hand off cold.
+> **The full pipeline runs unless a skip is argued in writing.** The burden of
+> proof is on the cheap path.
 
-[`ROADMAP.md`](../ROADMAP.md) marks the items that earn the full panel with ★ —
-nine of thirty-six. The panels cost real tokens and several minutes. They earn it
-on decisions that are expensive to reverse — the ledger's event schema, the
-expectation model's parameterization, the affinity combination rule — and waste
-it on work whose shape is already obvious.
+**Entry.** This governs work that gets a request at all. Typo fixes, dependency
+bumps, and doc edits never enter the pipeline — `/commit` has a "maps to no
+roadmap row" path for those.
+
+**Three hard triggers. Any one and the panel runs; no argument is available:**
+
+| | Trigger | Why it's disqualifying |
+|---|---|---|
+| 1 | Intake's **Open Questions** came out non-empty | That *is* a blurry edge, and it's mechanical — the agent already wrote it down |
+| 2 | **Explicitly out** couldn't be filled | Intake already treats an empty one as "interview more". Still empty means the edges aren't known |
+| 3 | It touches something **expensive to reverse** | A settled ADR, a pillar, the event schema, a dataset contract, or anything another roadmap item pins |
+
+Clear all three and a skip becomes *available* — at the cost of a written
+argument in the request's closing **Stage plan** section, naming which triggers it
+cleared. That section is what gets surfaced to the user at the intake handoff,
+which is already human-gated, so nothing new interrupts.
+
+**Skipping doesn't mean shipping unreviewed.** `/implement-plan` has a
+direct-build mode that takes the intake artifact in place of a plan. Its
+adversarial reviewers were never plan-bound — the roster is derived from what the
+diff touched — so they run at full strength. A small change spawns a small panel
+on its own; there is no trim lever and deliberately shouldn't be.
+
+What a skip genuinely forfeits is **verification by execution against numbered
+acceptance criteria**, because a skipped item never wrote any. That is the
+content of the decision, not a gap in it — an item that needs numbered criteria
+trips trigger 1.
 
 See [CLAUDE.md](../CLAUDE.md) for where this sits in the repo.
