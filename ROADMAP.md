@@ -153,8 +153,8 @@ practice subsystem `DESIGN.md` rejected.
 **Proves:** the architecture, and whether the loop is any fun.
 **Exit:** two careers, ten box scores each, one correction, a spend, a worksheet
 applied in-game.
-**Status:** **IN-PROGRESS** — 1.1 `app-shell` is at intake. No application code
-has landed yet.
+**Status:** **IN-PROGRESS** — 1.1 `app-shell` is planned and decided; implementation
+is next. No application code has landed yet.
 
 The economy here is **deliberately fake** — placeholder XP, invented expectation,
 guessed affinity numbers. Finding out whether the loop is satisfying comes before
