@@ -31,8 +31,17 @@
       "PowerShell(git remote *)",
       "PowerShell(gh pr view *)",
       "PowerShell(gh pr list*)",
+      "PowerShell(gh pr diff*)",
+      "PowerShell(gh pr status*)",
+      "PowerShell(gh pr checks*)",
       "PowerShell(gh run list*)",
       "PowerShell(gh run view *)",
+      "PowerShell(gh run watch *)",
+
+      "PowerShell(gh pr create *)",
+      "PowerShell(gh pr edit *)",
+      "PowerShell(gh pr ready *)",
+      "PowerShell(gh pr merge *)",
 
       "PowerShell(Get-ChildItem *)",
       "PowerShell(Get-Content *)",

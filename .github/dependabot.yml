@@ -27,4 +27,16 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
 
-  # npm arrives with Phase 1 item 1.1 (app-shell). Add the ecosystem entry then.
+  - package-ecosystem: "npm"
+    directory: "/app"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "deps"
+    labels: ["dependencies"]
+    # Same posture as the uv entry above, and the same reasoning: the lockfile
+    # is committed and CI rebuilds from it with `npm ci`, so a broken patch
+    # release surfaces on the next real PR anyway.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]

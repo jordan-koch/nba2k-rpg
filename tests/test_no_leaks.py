@@ -34,7 +34,10 @@ ALLOWED = {
     ".env.example": "documents the config keys; values are deliberately empty",
 }
 
-# Extensions worth scanning. Binary and lockfiles are skipped.
+# Extensions worth scanning. Binary files are skipped, and so is uv.lock — but
+# NOT every lockfile: `.json` is in this set, so app/package-lock.json IS
+# scanned. That is deliberate; npm lockfiles have historically carried local
+# paths and registry credentials.
 TEXT_SUFFIXES = {
     ".py",
     ".md",

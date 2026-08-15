@@ -103,4 +103,4 @@ Every artifact opens with a status blockquote:
 
 | Feature | Stage | Notes |
 |---|---|---|
-| _(none yet — the first will be Phase 1 item 1.1, `app-shell`)_ | | |
+| [1.1-app-shell](_done/1.1-app-shell/) | implemented | Roadmap 1.1. FastAPI + React/Vite seam, health endpoint, frontend CI job. Unblocks the rest of Phase 1 |

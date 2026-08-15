@@ -1,0 +1,11 @@
+<!-- SVG rather than .ico: .gitattributes marks *.ico binary, which makes it
+     undiffable for no benefit on a 16-line file. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="nba2k-rpg">
+  <circle cx="16" cy="16" r="14" fill="#e2703a" />
+  <g fill="none" stroke="#1a1d23" stroke-width="1.5">
+    <circle cx="16" cy="16" r="14" />
+    <path d="M2 16h28" />
+    <path d="M16 2c-5 4-5 24 0 28" />
+    <path d="M16 2c5 4 5 24 0 28" />
+  </g>
+</svg>

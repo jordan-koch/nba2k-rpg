@@ -1,0 +1,115 @@
+/* One page, so one stylesheet. No CSS framework and no component library.
+
+   HONEST NOTE, because the scope's non-goal reads "no design tokens": the
+   custom properties below ARE tokens, narrowly. They exist so the page is
+   legible in both light and dark, which is a localhost tool the author stares
+   at — not the beginning of a theme system. Recorded as a deliberate widening
+   in the item's IMPLEMENTATION_REPORT rather than left as an unlisted file
+   quietly contradicting its own comment. Real design work is item 1.7+. */
+
+:root {
+  --bg: #14161a;
+  --fg: #e7e9ee;
+  --muted: #9aa3b2;
+  --line: #2a2f38;
+  --ok: #4ade80;
+  --bad: #f87171;
+
+  color-scheme: dark light;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #fbfbfd;
+    --fg: #1a1d23;
+    --muted: #5c6472;
+    --line: #e2e5ea;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.shell {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 0.25rem 0 2rem;
+  color: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.facts dt {
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  vertical-align: 0.1em;
+}
+
+.dot--ok {
+  background: var(--ok);
+}
+
+.dot--bad {
+  background: var(--bad);
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+}
+
+.panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+pre {
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  border-radius: 0.375rem;
+}
+
+code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.9em;
+}
