@@ -34,6 +34,18 @@ updates:
     commit-message:
       prefix: "deps"
     labels: ["dependencies"]
+    # typescript-eslint pins an UPPER bound on typescript (">=4.8.4 <6.1.0" as
+    # of 8.67.0), so bumping typescript alone produces a PR that cannot install:
+    # `npm ci` fails ERESOLVE before any check runs. That happened with TS 7.0.2
+    # in PR #13, which was closed for exactly this reason. Grouping them means
+    # dependabot proposes a set that resolves together, or proposes nothing —
+    # either beats regenerating an unmergeable PR on every TypeScript release.
+    groups:
+      typescript-toolchain:
+        patterns:
+          - "typescript"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
     # Same posture as the uv entry above, and the same reasoning: the lockfile
     # is committed and CI rebuilds from it with `npm ci`, so a broken patch
     # release surfaces on the next real PR anyway.
