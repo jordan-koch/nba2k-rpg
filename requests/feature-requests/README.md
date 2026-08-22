@@ -113,5 +113,5 @@ the record that it did. The **Stage plan** section carries the argument.
 
 | Feature | Stage | Notes |
 |---|---|---|
-| [H1-escalation-queue](H1-escalation-queue/) | planned | Roadmap H1, harness. A place to park a decision instead of interrupting. **Blocks item 1.3** |
+| [H1-escalation-queue](_done/H1-escalation-queue/) | implemented | Roadmap H1, harness. A place to park a decision instead of interrupting. **Unblocked item 1.3** |
 | [1.1-app-shell](_done/1.1-app-shell/) | implemented | Roadmap 1.1. FastAPI + React/Vite seam, health endpoint, frontend CI job. Unblocks the rest of Phase 1 |

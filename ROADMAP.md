@@ -166,8 +166,8 @@ practice subsystem `DESIGN.md` rejected.
 **Exit:** two careers, ten box scores each, one correction, a spend, a worksheet
 applied in-game.
 **Status:** **IN-PROGRESS** — 1.1 `app-shell` has landed the application
-skeleton. No domain logic yet. Harness row H1 is in flight; 1.2 `career-ledger`
-is the next numbered item.
+skeleton and harness row H1 the escalation queue. No domain logic yet; 1.2
+`career-ledger` is the next numbered item.
 
 The economy here is **deliberately fake** — placeholder XP, invented expectation,
 guessed affinity numbers. Finding out whether the loop is satisfying comes before
@@ -194,7 +194,7 @@ calibrating it.
 
 | # | Item | Deliverable | Needs | Blocks | Status |
 |---|---|---|---|---|---|
-| H1 | `escalation-queue` | `ESCALATIONS.md`, the parked-decision format, and a structural test that every entry names a real roadmap item | — | 1.3 | IN-PROGRESS |
+| H1 | `escalation-queue` | `ESCALATIONS.md`, the parked-decision format, and a structural test that every entry names a real roadmap item | — | 1.3 | DONE |
 | H2 | `domain-engineer` | Write-capable subagent for `src/`: definition, rulebook, spawn protocol, fixed-section return contract | 1.2 | 1.4 | NOT STARTED |
 
 *Why H1 exists.* Item 1.1 surfaced the real constraint, and it wasn't build
@@ -214,12 +214,12 @@ are the ledger core — the schema everything else pins and the append-only
 correction model — and stay in the main thread, which also means H2 gets two
 items of evidence to write from rather than one.
 
-*Parked, not scheduled.* A serviceability gate for the web UI, a design/UX
-specialist, and an autonomous stage dispatcher are deliberately **not** rows
-here. Each is a hypothesis with a named moment to re-decide, and H1 builds the
-queue that holds them. Note that "serviceable" is already a v1 constraint in
-both directions (see §v1) and is nowhere defined or tested — that, rather than
-design polish, is what a gate would be for.
+*Parked, not scheduled.* Hypotheses deliberately **not** given rows here live in
+[`ESCALATIONS.md`](ESCALATIONS.md), each recorded against the moment that
+reopens it — that queue is what H1 builds, and it is the single place to look for
+them. Note that "serviceable" is already a v1 constraint in both directions (see
+§v1) and is nowhere defined or tested; that, rather than design polish, is what a
+gate would be for.
 
 ### Phase 2 — Economy — **NOT STARTED**
 

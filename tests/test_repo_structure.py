@@ -241,8 +241,26 @@ def test_adr_numbers_are_unique_and_contiguous() -> None:
 
 
 def test_core_documents_exist() -> None:
-    """The three documents that carry the design, each doing one job."""
-    for name in ("GAME_DESIGN.md", "ROADMAP.md", "DESIGN.md", "README.md", "CLAUDE.md"):
+    """The root documents that carry the project, each doing one job.
+
+    Stated as a rule rather than a count, because the count was already wrong:
+    this docstring said "the three documents" over a five-name tuple before
+    ESCALATIONS.md joined it.
+
+    ESCALATIONS.md earns its place for a reason the others don't need spelled
+    out. Every other guard on the queue — the parser, the field checks, the
+    register-boundary assertions — reads the file and would pass vacuously over
+    a file that is not there. Deleting it would silently empty the parking
+    mechanism, and this is the one assertion that would notice.
+    """
+    for name in (
+        "GAME_DESIGN.md",
+        "ROADMAP.md",
+        "DESIGN.md",
+        "ESCALATIONS.md",
+        "README.md",
+        "CLAUDE.md",
+    ):
         assert (REPO_ROOT / name).is_file(), f"{name} is missing."
 
 
@@ -280,6 +298,20 @@ def test_claude_md_project_map_lists_both_new_directories() -> None:
         assert path in body, (
             f"CLAUDE.md's project map does not mention {path}. An agent "
             "onboarding from it would not know the directory exists."
+        )
+
+
+def test_both_project_maps_name_the_escalation_queue() -> None:
+    """Discoverability is the mechanism, so it gets an assertion rather than a hope.
+
+    The three hypotheses this queue absorbed failed by sitting somewhere nobody
+    looks. A root file nothing points at repeats that failure exactly, and the
+    two project maps are where an agent and a human respectively start reading.
+    """
+    for name in ("CLAUDE.md", "README.md"):
+        assert "ESCALATIONS.md" in _read(name), (
+            f"{name}'s project map does not mention ESCALATIONS.md. The queue is "
+            "only useful if the documents people onboard from point at it."
         )
 
 

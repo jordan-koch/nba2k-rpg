@@ -89,6 +89,11 @@ it touches**, so the request lands pre-grounded:
   not deciding them here; you are making sure scoping knows they are open.
 - Any obvious constraints from the project rules (resolve-by-name, append-only ledger,
   grain-declared-and-tested, agents-never-commit, no bulk data in the repo) this has to live within?
+- **What was already parked against this moment?** Open
+  [`ESCALATIONS.md`](../../../ESCALATIONS.md) and surface every open entry whose `Bears on:`
+  names this item's roadmap moment — **its item id or the phase it sits in**, since the moment
+  vocabulary admits both. Quote them into the request: they are decisions someone already hit and
+  deferred *to now*, and this is the moment they were deferred to.
 
 Aim for **~3–6 targeted lookups** — enough to name the subsystem and the 2–4 files/datasets a
 scoper opens first. You're handing the next stage a map, not designing the solution: if you're

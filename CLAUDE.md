@@ -52,6 +52,7 @@ taken deliberately. Consequences that bind every change:
 GAME_DESIGN.md      What the game is — read FIRST for intent
 ROADMAP.md          v1 boundary, five phases, 36 work items
 DESIGN.md           Open engineering work — unsettled mechanism math only
+ESCALATIONS.md      Parked decisions — each against the moment that reopens it
 docs/
   data-access.md      What can be read, from where, with epistemic labels
   decisions/          ADRs — ten settled calls
@@ -213,9 +214,9 @@ for sustained enjoyment, not completeness. It does *not* mean light process —
   and the seven failure modes in §7. Most naive progression designs hit at least
   one of: low-minute dead ends, backwards curves, convergence to uniform, or a
   cosmetic class.
-- **Check the ADRs before proposing anything structural.** Nine decisions are
+- **Check the ADRs before proposing anything structural.** Ten decisions are
   settled and re-litigating them is the most expensive thing that can happen here.
-- **Don't answer `[OPEN-N]` questions ad hoc.** Each is parked against a phase and
-  gets a scoping panel with the loop already in hand to argue against.
+- **Don't answer `[OPEN-N]` ad hoc.** Each is parked against a phase and gets a
+  panel with the loop in hand. Park a *new* decision in `ESCALATIONS.md` by moment.
 - **`unconfirmed` beliefs are tasks.** If a plan depends on an external source
   nobody has pulled, say so rather than assuming its shape.

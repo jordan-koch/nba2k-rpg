@@ -9,6 +9,10 @@ substantial change enters here.
 | **[bugfix-requests/](bugfix-requests/)** | A defect in existing code, config, or tooling | `/make-bugfix-request` |
 | **[calibration-findings/](calibration-findings/)** | Everything ran green and the **economy is wrong** | see that track's README |
 
+**Not every question is a request.** A *decision* you would rather park than
+answer now belongs in [ESCALATIONS.md](../ESCALATIONS.md), recorded against the
+moment that reopens it. Parking blocks nothing and starts no track.
+
 Each track's **README is the contract** — layout, status grammar, the live Index,
 and the `_done/` archive convention. The back half
 (`/create-implementation-plan` → `/implement-plan`) is shared and auto-detects
