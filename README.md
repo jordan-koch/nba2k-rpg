@@ -57,6 +57,7 @@ nba2k-rpg/
 ├── GAME_DESIGN.md     What the game is — fantasy, pillars, the player's decisions
 ├── ROADMAP.md         v1 boundary, five phases, 36 work items
 ├── DESIGN.md          Open engineering work — unsettled mechanism math
+├── ESCALATIONS.md     Parked decisions — each against the moment that reopens it
 ├── CLAUDE.md          Onboarding map + the rules to work by
 ├── docs/
 │   ├── data-access.md   What can be read, from where, how confident we are

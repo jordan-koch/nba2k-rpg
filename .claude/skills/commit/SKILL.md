@@ -7,7 +7,8 @@ description: >-
   "commit the changes", "let's land this", "/commit", or as the natural end of a pipeline stage.
   It stages deliberately (never a blind `git add -A`), refuses to stage secrets or bulk data, runs
   the doc-drift checks proportionally to what changed, keeps `ROADMAP.md`'s per-item completion
-  statuses in step with what actually landed, proposes a message, and asks before writing anything.
+  statuses in step with what actually landed, surfaces any parked escalation entries against a row
+  it is closing, proposes a message, and asks before writing anything.
   On approval it commits and pushes the feature branch. It does NOT open the PR, never pushes
   `main`, and never force-pushes — those stay yours. It does NOT run lint, types, tests; CI owns
   those and runs them on the PR.
@@ -130,12 +131,17 @@ tree now contains all of it.
 been met — the exit is a separate claim from the item list and is often the thing not yet true.
 When you mark a phase `DONE`, stamp the date on its `**Status:**` line.
 
-Two rails, because this column is a record rather than a plan:
+Three rails, because this column is a record rather than a plan:
 
 - **Never mark ahead.** An item is `DONE` when the commit that completes it is being made, not when
   a plan says it will be.
 - **Never mark down silently.** If work already recorded as `DONE` looks regressed or reverted,
   stop and surface it. Walking a status backwards is a decision, not bookkeeping.
+- **Before flipping a row to `DONE`, surface open entries naming it.** Check
+  [`ESCALATIONS.md`](../../../ESCALATIONS.md) for open entries whose `Bears on:` names that item —
+  **or, when you are marking a phase header `DONE`, that phase name** — and report them. Closing
+  the row is the moment they stop being findable. Surface only; nothing here blocks the commit, and
+  no agent resolves an entry.
 
 If the change is a doc edit, a typo fix, or otherwise maps to no roadmap row, say "no roadmap
 change" and move on. Most commits are this.

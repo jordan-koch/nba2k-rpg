@@ -130,7 +130,11 @@ WHY it produces the wrong result — not just where. Distinguish the cause from 
 ```
 
 **If the cause is MURKY**, append the required Escalation section (the panel is deferred, so this is the
-hand-off — AC4 (a)/(b)/(c)):
+hand-off — AC4 (a)/(b)/(c)). **Also park a queue entry** in
+[`ESCALATIONS.md`](../../../ESCALATIONS.md) naming the moment the bug bears on — a pointer only,
+since the evidence trail stays here. Note the two senses of the word: this Escalation section is
+blocking and bug-scoped, while a queue entry blocks nothing. The bug still waits; the queue is
+what remembers that it is waiting.
 
 ```markdown
 ## Escalation (murky cause — RCA panel deferred)
