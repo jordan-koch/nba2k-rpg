@@ -95,4 +95,4 @@ the terminal stage, Index row stays with its link updated.
 
 | Bug | Stage | Notes |
 |---|---|---|
-| [pipeline-status-rollover](pipeline-status-rollover/) | diagnosed | Four instances across three skills: two leave sibling statuses stale, two write a token no grammar defines, one hardcodes a single track's terminal. Only the first breaks a guard |
+| [pipeline-status-rollover](pipeline-status-rollover/) | planned | Four instances across three skills: two leave sibling statuses stale, two write a token no grammar defines, one hardcodes a single track's terminal. Only the first breaks a guard |

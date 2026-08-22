@@ -1,4 +1,4 @@
-> **Status:** diagnosed · created 2026-08-15 · decided · next: plan
+> **Status:** planned · created 2026-08-15 · decided · next: implement
 
 # Bug Report — Stage-3 and stage-4 skills leave sibling artifact statuses stale, and write a token the grammar doesn't have
 

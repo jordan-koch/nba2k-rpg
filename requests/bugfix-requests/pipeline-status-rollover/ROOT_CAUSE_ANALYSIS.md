@@ -1,4 +1,4 @@
-> **Status:** diagnosed · created 2026-08-21 · decided · next: plan
+> **Status:** planned · created 2026-08-21 · decided · next: implement
 
 # Root Cause Analysis — Pipeline skills write stage words nothing checks
 
@@ -31,7 +31,9 @@ isolates this defect and nothing else. `ruff check`, `ruff format --check` and `
 | `test_stage_advancing_skills_roll_the_artifacts_already_in_the_directory` | `['create-implementation-plan', 'implement-plan']` | defect **1** (the blocking one) |
 | `test_the_terminal_stage_skill_does_not_hardcode_one_track_s_terminal_token` | `implement-plan` hardcodes `['implemented']` while serving all three tracks | defect **3** |
 
-**Not yet committed** — it lands together with this RCA through `/commit`, since agents don't commit.
+**Committed in `fb0406e`**, together with this RCA. *(This line originally read "not yet committed",
+which was true when written and stopped being true when the commit landed. Corrected in place rather
+than left to mislead a cold implementer into re-landing the repro.)*
 
 Defect 3 needed its own assertion: `implemented` *is* in the union of declared grammars, so the
 conformance test cannot see it. It is wrong only *relative to the track*, which is a different
