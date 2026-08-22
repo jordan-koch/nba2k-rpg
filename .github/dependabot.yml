@@ -37,9 +37,15 @@ updates:
     # typescript-eslint pins an UPPER bound on typescript (">=4.8.4 <6.1.0" as
     # of 8.67.0), so bumping typescript alone produces a PR that cannot install:
     # `npm ci` fails ERESOLVE before any check runs. That happened with TS 7.0.2
-    # in PR #13, which was closed for exactly this reason. Grouping them means
-    # dependabot proposes a set that resolves together, or proposes nothing —
-    # either beats regenerating an unmergeable PR on every TypeScript release.
+    # in PR #13, and the group below was added to stop it happening again.
+    #
+    # The group was not enough. PR #17 raised the identical unmergeable bump two
+    # minutes after the group landed: when a group's other members have no newer
+    # version available, dependabot still opens the group with the one member
+    # that does. Grouping synchronises packages that move together — it cannot
+    # hold one back until its peers catch up. So the major is ignored outright
+    # below, and the group keeps its real job of moving the whole toolchain in a
+    # single PR once there is a whole toolchain to move.
     groups:
       typescript-toolchain:
         patterns:
@@ -52,3 +58,9 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
+      # Measured 2026-08-21: typescript-eslint's latest stable is still 8.67.0
+      # with the <6.1.0 peer bound, and only 8.67.1-alpha.* exists beyond it —
+      # so no TypeScript 7 bump can install. DELETE THIS ENTRY once a stable
+      # typescript-eslint accepts TS 7; the group above then handles the move.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
