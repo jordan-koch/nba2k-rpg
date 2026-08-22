@@ -1,4 +1,4 @@
-> **Status:** planned · created 2026-08-15 · decided · next: implement
+> **Status:** implemented · created 2026-08-15 · decided · next: commit
 
 # Implementation Plan — Escalation Queue (Harness H1)
 
