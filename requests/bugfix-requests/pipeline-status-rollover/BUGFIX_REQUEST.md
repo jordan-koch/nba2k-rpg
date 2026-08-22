@@ -1,4 +1,4 @@
-> **Status:** intake · created 2026-08-15 · open · next: root-cause
+> **Status:** diagnosed · created 2026-08-15 · decided · next: plan
 
 # Bug Report — Stage-3 and stage-4 skills leave sibling artifact statuses stale, and write a token the grammar doesn't have
 

@@ -29,6 +29,56 @@ INTAKE_ARTIFACTS = {
 }
 STAGE_PLAN_HEADING = re.compile(r"^##\s+Stage plan\s*$", re.MULTILINE | re.IGNORECASE)
 
+# ─── Pipeline skills vs the status grammar they are supposed to obey ──────────
+#
+# Each track README declares one grammar; each pipeline skill restates the stage
+# vocabulary as a literal in its own prose. Six restatements, no mechanical link.
+# These two guards are what makes the READMEs authoritative rather than advisory.
+SKILLS_DIR = REPO_ROOT / ".claude" / "skills"
+STATUS_GRAMMAR = re.compile(r"\*\*Status grammar:\*\*\s*(?P<tokens>.+)")
+BACKTICKED = re.compile(r"`([a-z-]+)`")
+# The `> **Status:** <stage> · …` blockquote a skill tells you to write.
+SKILL_STATUS_TEMPLATE = re.compile(r"^>\s*\*\*Status:\*\*\s*(?P<stage>[a-z-]+)", re.MULTILINE)
+
+# Skills that move an item from one stage to the next, so an artifact written by
+# an EARLIER stage is already sitting in the directory. Intake skills are absent
+# deliberately: they create the item, so there is no sibling to roll.
+STAGE_ADVANCING_SKILLS = (
+    "scope-feature",
+    "diagnose-bug",
+    "create-implementation-plan",
+    "implement-plan",
+)
+ADVANCE_STATUS = re.compile(r"advance status", re.IGNORECASE)
+NEXT_SECTION = re.compile(r"^##\s", re.MULTILINE)
+# Both skills that get this right name the pre-existing artifact's blockquote.
+ROLLS_A_SIBLING = re.compile(r"Status blockquote|sibling|every artifact", re.IGNORECASE)
+
+# The last stage word of each track — what a terminal-stage skill must write.
+# They differ per track, so a skill serving several may not hardcode one.
+TERMINAL_TOKENS = frozenset({"implemented", "fixed", "retuned"})
+DERIVES_TERMINAL = re.compile(r"terminal (?:stage word|token)|track's terminal", re.IGNORECASE)
+
+
+def _declared_stage_tokens() -> set[str]:
+    """Every stage word the three track READMEs declare, unioned."""
+    tokens: set[str] = set()
+    for track in REQUEST_TRACKS:
+        body = (REPO_ROOT / "requests" / track / "README.md").read_text(encoding="utf-8")
+        match = STATUS_GRAMMAR.search(body)
+        if match:
+            tokens.update(BACKTICKED.findall(match["tokens"]))
+    return tokens
+
+
+def _advance_status_section(body: str) -> str:
+    """The region of a skill where it tells you to move the item's stage."""
+    match = ADVANCE_STATUS.search(body)
+    if match is None:
+        return ""
+    following = NEXT_SECTION.search(body, match.end())
+    return body[match.start() : following.start()] if following else body[match.start() :]
+
 
 def _git_check_ignore(relative_path: str) -> bool:
     """True if git would ignore `relative_path`. Works on paths that don't exist."""
@@ -214,6 +264,92 @@ def test_every_live_intake_artifact_declares_a_stage_plan() -> None:
         f"Live intake artifact(s) with no '## Stage plan' section: {missing}. "
         "ADR 0010: the full pipeline is the default, and skipping a stage is an exception "
         "argued in the request. State the stages even when the answer is 'all of them'."
+    )
+
+
+def test_every_pipeline_skill_writes_a_stage_token_some_grammar_declares() -> None:
+    """A skill may only tell you to write a stage word its track actually defines.
+
+    Nothing checked this before, and that is why the drift was invisible: the
+    Index-vs-artifact guard below compares a directory against *itself*, so a
+    skill that writes a made-up token consistently into both the Index and the
+    artifact satisfies it perfectly. Only a human reading the README would ever
+    notice. Conformance to the grammar is a different claim from internal
+    agreement, and this is the one that was never asserted.
+    """
+    declared = _declared_stage_tokens()
+    assert declared, "No status grammar parsed from any track README."
+
+    offenders: dict[str, list[str]] = {}
+    for path in sorted(SKILLS_DIR.glob("*/SKILL.md")):
+        written = {
+            m["stage"] for m in SKILL_STATUS_TEMPLATE.finditer(path.read_text(encoding="utf-8"))
+        }
+        if invalid := sorted(written - declared):
+            offenders[path.parent.name] = invalid
+
+    assert not offenders, (
+        f"Skill(s) instructing a stage token no track grammar declares: {offenders}. "
+        f"The declared vocabulary is {sorted(declared)}. Each track README is the "
+        "source of truth for its grammar; a skill that invents a token puts the "
+        "repo into a stage that does not exist."
+    )
+
+
+def test_stage_advancing_skills_roll_the_artifacts_already_in_the_directory() -> None:
+    """Advancing a stage means advancing EVERY artifact, not just the new one.
+
+    `test_index_stage_cells_match_their_artifact_status_headers` compares the
+    Index cell against every `*.md` in the item directory, so an artifact left at
+    the previous stage word reds the build. A skill that advances the Index and
+    opens its own artifact while saying nothing about the ones already there is
+    therefore an instruction to break the build — which is what following it
+    literally did.
+
+    `scope-feature` and `diagnose-bug` get this right by naming the prior
+    artifact's Status blockquote; this asserts the other two do the same.
+    """
+    missing = []
+    for name in STAGE_ADVANCING_SKILLS:
+        section = _advance_status_section(
+            (SKILLS_DIR / name / "SKILL.md").read_text(encoding="utf-8")
+        )
+        if not section:
+            missing.append(f"{name} (no 'advance status' section found at all)")
+        elif not ROLLS_A_SIBLING.search(section):
+            missing.append(name)
+
+    assert not missing, (
+        f"Stage-advancing skill(s) that never tell you to roll the artifacts already "
+        f"in the directory: {missing}. Following them literally leaves a sibling at the "
+        "previous stage word, which fails the Index-vs-artifact guard. See "
+        "scope-feature/SKILL.md for the pattern that gets it right."
+    )
+
+
+def test_the_terminal_stage_skill_does_not_hardcode_one_track_s_terminal_token() -> None:
+    """`implement-plan` closes out all three tracks, which end on different words.
+
+    Feature ends at `implemented`, bugfix at `fixed`, calibration at `retuned`.
+    A skill that writes one of those unconditionally is correct for exactly one
+    track and silently wrong for the other two — and it is the *last* stage, so
+    nothing downstream is left to notice.
+
+    Scoped to the terminal skill on purpose: it is the only one whose written
+    token varies by track. `diagnose-bug` already shows the tolerated shape by
+    saying "or the terminal stage word" rather than naming one.
+    """
+    section = _advance_status_section(
+        (SKILLS_DIR / "implement-plan" / "SKILL.md").read_text(encoding="utf-8")
+    )
+    assert section, "implement-plan has no 'advance status' section."
+
+    named = {token for token in TERMINAL_TOKENS if token in section}
+
+    assert DERIVES_TERMINAL.search(section) or len(named) > 1, (
+        f"implement-plan's advance-status section hardcodes {sorted(named)} and serves "
+        f"all three tracks, whose terminals are {sorted(TERMINAL_TOKENS)}. Either derive "
+        "the word from the resolved track or name each track's terminal explicitly."
     )
 
 

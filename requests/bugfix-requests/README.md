@@ -95,4 +95,4 @@ the terminal stage, Index row stays with its link updated.
 
 | Bug | Stage | Notes |
 |---|---|---|
-| [pipeline-status-rollover](pipeline-status-rollover/) | intake | Stage-3/4 skills leave sibling artifact statuses stale and write a token no grammar defines. Reds the build on every item reaching stage 3 |
+| [pipeline-status-rollover](pipeline-status-rollover/) | diagnosed | Four instances across three skills: two leave sibling statuses stale, two write a token no grammar defines, one hardcodes a single track's terminal. Only the first breaks a guard |
